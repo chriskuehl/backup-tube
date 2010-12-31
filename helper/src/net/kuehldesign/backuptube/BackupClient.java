@@ -102,7 +102,7 @@ public class BackupClient {
         this.maxResults = maxResults;
     }
 
-    private URL getFeedURL(int startIndex) throws FatalBackupException, MalformedFeedURLException {
+    public URL getFeedURL(int startIndex) throws FatalBackupException, MalformedFeedURLException {
         // max-results is 50
         // start-index should increase by 50
 
@@ -115,7 +115,7 @@ public class BackupClient {
         }
     }
 
-    private ArrayList<YouTubeVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
+    public ArrayList<YouTubeVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
         ArrayList<YouTubeVideo> videos = new ArrayList();
         int total = (- 1);
         int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
