@@ -35,9 +35,9 @@ public class BackupTubeApp {
 
         for (String arg : args) {
             if (expecting != null) {
-                if (expecting == "user") {
+                if (expecting.equals("user")) {
                     user = arg;
-                } else if (expecting == "saveDir") {
+                } else if (expecting.equals("saveDir")) {
                     saveDir = arg;
                 } else {
                     System.err.println("Unexpected: " + arg);
