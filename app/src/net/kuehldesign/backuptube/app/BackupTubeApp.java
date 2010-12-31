@@ -1,11 +1,15 @@
 package net.kuehldesign.backuptube.app;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.FileDownloader;
+import net.kuehldesign.backuptube.app.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
@@ -24,6 +28,22 @@ public class BackupTubeApp {
         for (String line : lines) {
             out.println(line);
         }
+    }
+
+    private static String getLineFromConsole(BufferedReader reader, String prompt) throws UnableToReadFromConsoleException {
+        String line = null;
+
+        while (line == null || line.length() <= 0) {
+            System.out.println(prompt);
+
+            try {
+                line = reader.readLine();
+            } catch (IOException ex) {
+                throw new UnableToReadFromConsoleException();
+            }
+        }
+
+        return line;
     }
 
     public static void main(String[] args) {
@@ -73,6 +93,27 @@ public class BackupTubeApp {
         if (isError || showHelp) {
             showHelp(isError ? System.err : System.out);
             System.exit(0);
+        }
+
+        InputStreamReader inreader = new InputStreamReader(System.in);
+        BufferedReader reader = new BufferedReader(inreader);
+
+        if (user == null) {
+            try {
+                user = getLineFromConsole(reader, "Enter the user to backup:");
+            } catch (UnableToReadFromConsoleException ex) {
+                ex.printStackTrace();
+                System.exit(0);
+            }
+        }
+
+        if (saveDir == null) {
+            try {
+                saveDir = getLineFromConsole(reader, "Enter the directory to save the backed up data to:");
+            } catch (UnableToReadFromConsoleException ex) {
+                ex.printStackTrace();
+                System.exit(0);
+            }
         }
 
         System.out.println("User: '" + user + "', saveDir: '" + saveDir + "'");
