@@ -19,7 +19,7 @@ import net.kuehldesign.backuptube.exception.MalformedFeedURLException;
 import net.kuehldesign.backuptube.exception.UnableToGetSourceException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 
-public class BackupClient {
+public class BackupHelper {
 
     public static final int FORMAT_3GP_LOW     = 1;
     public static final int FORMAT_3GP_MEDIUM  = 2;
@@ -82,7 +82,7 @@ public class BackupClient {
     String user;
     int maxResults = 50;
 
-    public BackupClient() {
+    public BackupHelper() {
 
     }
 

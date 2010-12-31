@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.LinkedList;
-import net.kuehldesign.backuptube.BackupClient;
+import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.UnableToGetSourceException;
@@ -38,7 +38,7 @@ public class YouTubeVideo {
 
     public String getID() {
         String url = getURL();
-        return BackupClient.between(url, "?v=", "&feature");
+        return BackupHelper.between(url, "?v=", "&feature");
     }
 
 //    public String getToken() {
@@ -47,10 +47,10 @@ public class YouTubeVideo {
 
     private String findToken(String source) throws FatalBackupException, BadVideoException {
         try {
-            String t = URLEncoder.encode(BackupClient.between(source, "\"t\": \"", "\""), "UTF-8");
+            String t = URLEncoder.encode(BackupHelper.between(source, "\"t\": \"", "\""), "UTF-8");
 
             if (! t.endsWith("%3D")) {
-                t = BackupClient.betweenMore(source, "&t=", "&", 2);
+                t = BackupHelper.betweenMore(source, "&t=", "&", 2);
             }
 
             if (t == null) {
@@ -58,7 +58,7 @@ public class YouTubeVideo {
                 String infoSource;
 
                 try {
-                    infoSource = BackupClient.getSource("http://www.youtube.com/get_video_info?video_id=" + getID());
+                    infoSource = BackupHelper.getSource("http://www.youtube.com/get_video_info?video_id=" + getID());
                 } catch (UnableToGetSourceException ex) {
                     throw new BadVideoException("Unable to get source for info");
                 }
@@ -70,7 +70,7 @@ public class YouTubeVideo {
                 if (infoSourceUnencoded.contains("status=fail")) {
                     hasError = true;
                 } else {
-                    t = BackupClient.between(infoSourceUnencoded, "&token=", "&");
+                    t = BackupHelper.between(infoSourceUnencoded, "&token=", "&");
                 }
             }
 
@@ -86,7 +86,7 @@ public class YouTubeVideo {
 
     private void findURLs(String source, String source18) throws FatalBackupException {
         // URL map
-        String urlMap = BackupClient.between(source, "&fmt_url_map=", "&") + "%2C" + BackupClient.between(source18, "&fmt_url_map=", "&");
+        String urlMap = BackupHelper.between(source, "&fmt_url_map=", "&") + "%2C" + BackupHelper.between(source18, "&fmt_url_map=", "&");
         String[] mapParts = urlMap.split("%2C");
 
         for (String mapPart : mapParts) {
@@ -108,47 +108,47 @@ public class YouTubeVideo {
 
             switch (Integer.valueOf(qual)) {
                 case 13:
-                    format = BackupClient.FORMAT_3GP_LOW;
+                    format = BackupHelper.FORMAT_3GP_LOW;
                 break;
 
                 case 16:
-                    format = BackupClient.FORMAT_3GP_MEDIUM;
+                    format = BackupHelper.FORMAT_3GP_MEDIUM;
                 break;
 
                 case 36:
-                    format = BackupClient.FORMAT_3GP_HIGH;
+                    format = BackupHelper.FORMAT_3GP_HIGH;
                 break;
 
                 case 5:
-                    format = BackupClient.FORMAT_FLV_LOW;
+                    format = BackupHelper.FORMAT_FLV_LOW;
                 break;
 
                 case 34:
-                    format = BackupClient.FORMAT_FLV_MEDIUM;
+                    format = BackupHelper.FORMAT_FLV_MEDIUM;
                 break;
 
                 case 6:
-                    format = BackupClient.FORMAT_FLV_MEDIUM2;
+                    format = BackupHelper.FORMAT_FLV_MEDIUM2;
                 break;
 
                 case 35:
-                    format = BackupClient.FORMAT_FLV_HIGH;
+                    format = BackupHelper.FORMAT_FLV_HIGH;
                 break;
 
                 case 18:
-                    format = BackupClient.FORMAT_MP4_HIGH;
+                    format = BackupHelper.FORMAT_MP4_HIGH;
                 break;
 
                 case 22:
-                    format = BackupClient.FORMAT_MP4_720P;
+                    format = BackupHelper.FORMAT_MP4_720P;
                 break;
 
                 case 37:
-                    format = BackupClient.FORMAT_MP4_1080P;
+                    format = BackupHelper.FORMAT_MP4_1080P;
                 break;
 
                 case 38:
-                    format = BackupClient.FORMAT_MP4_4K;
+                    format = BackupHelper.FORMAT_MP4_4K;
                 break;
             }
 
@@ -160,9 +160,9 @@ public class YouTubeVideo {
     }
 
     public String getExtension() {
-        if (cacheFormatValue >= BackupClient.FORMAT_MP4_HIGH) {
+        if (cacheFormatValue >= BackupHelper.FORMAT_MP4_HIGH) {
             return "mp4";
-        } else if (cacheFormatValue >= BackupClient.FORMAT_FLV_LOW) {
+        } else if (cacheFormatValue >= BackupHelper.FORMAT_FLV_LOW) {
             return "flv";
         } else {
             return "3gp";
@@ -174,8 +174,8 @@ public class YouTubeVideo {
         String source18;
 
         try {
-            source = BackupClient.getSource(getURL());
-            source18 = BackupClient.getSource(getURL() + "&fmt=18");
+            source = BackupHelper.getSource(getURL());
+            source18 = BackupHelper.getSource(getURL() + "&fmt=18");
 
             cacheToken = findToken(source);
         } catch (Exception ex) {
