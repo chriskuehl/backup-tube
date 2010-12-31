@@ -1,5 +1,6 @@
 package net.kuehldesign.backuptube.app;
 
+import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,9 +12,70 @@ import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 import net.kuehldesign.backuptube.video.YouTubeVideo;
 
 public class BackupTubeApp {
+    private static void showHelp(PrintStream out) {
+        String[] lines = {
+                            "  usage: BackupTubeApp.jar",
+                            "options:",
+                            "         --help          Dislays this help message",
+                            "         -u [username]   Specify a username to backup",
+                            "         -d [directory]  Specify a directory to save data to"
+                         };
+
+        for (String line : lines) {
+            out.println(line);
+        }
+    }
+
     public static void main(String[] args) {
-        String user = args[0];
-        String saveDir = args[1];
+        boolean isError = false;
+        boolean showHelp = false;
+        String user = null;
+        String saveDir = null;
+        String expecting = null;
+
+        for (String arg : args) {
+            if (expecting != null) {
+                if (expecting == "user") {
+                    user = arg;
+                } else if (expecting == "saveDir") {
+                    saveDir = arg;
+                } else {
+                    System.err.println("Unexpected: " + arg);
+                    isError = true;
+                    break;
+                }
+
+                expecting = null;
+                continue;
+            }
+
+            if (arg.equals("--help")) {
+                showHelp = true;
+            } else if (arg.startsWith("-u")) {
+                if (arg.equals("-u")) {
+                    expecting = "user";
+                } else {
+                    user = arg.substring(2);
+                }
+            } else if (arg.startsWith("-d")) {
+                if (arg.equals("-d")) {
+                    expecting = "saveDir";
+                } else {
+                    saveDir = arg.substring(2);
+                }
+            } else {
+                System.err.println("Unexpected: " + arg);
+                isError = true;
+                break;
+            }
+        }
+
+        if (isError || showHelp) {
+            showHelp(isError ? System.err : System.out);
+            System.exit(0);
+        }
+
+        System.out.println("User: '" + user + "', saveDir: '" + saveDir + "'");
 
         BackupHelper helper = new BackupHelper();
         helper.setUser(user);
