@@ -1,6 +1,7 @@
 package net.kuehldesign.backuptube.app;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -44,6 +45,10 @@ public class BackupTubeApp {
         }
 
         return line;
+    }
+
+    private static boolean fileExists(String saveDir) {
+        return new File(saveDir).exists();
     }
 
     public static void main(String[] args) {
@@ -107,12 +112,31 @@ public class BackupTubeApp {
             }
         }
 
-        if (saveDir == null) {
-            try {
-                saveDir = getLineFromConsole(reader, "Enter the directory to save the backed up data to:");
-            } catch (UnableToReadFromConsoleException ex) {
-                ex.printStackTrace();
-                System.exit(0);
+        if (saveDir == null)  {
+            boolean success = false;
+            while (! success) {
+                try {
+                    saveDir = getLineFromConsole(reader, "Enter the directory to save the backed up data to:");
+
+                    if (! saveDir.endsWith("/")) {
+                        saveDir += "/";
+                    }
+
+                    if (! fileExists(saveDir)) {
+                        boolean wasCreated = new File(saveDir).mkdirs();
+
+                        if (! wasCreated) {
+                            System.err.println("Unable to create directory there, please choose a different location");
+                        } else {
+                            success = true;
+                        }
+                    } else {
+                        success = true;
+                    }
+                } catch (UnableToReadFromConsoleException ex) {
+                    ex.printStackTrace();
+                    System.exit(0);
+                }
             }
         }
 
