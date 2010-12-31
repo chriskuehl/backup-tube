@@ -17,6 +17,8 @@ import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 import net.kuehldesign.backuptube.video.YouTubeVideo;
 
 public class BackupTubeApp {
+    private static final String badSaveDirMessage = "Unable to create directory there, please choose a different location";
+
     private static void showHelp(PrintStream out) {
         String[] lines = {
                             "  usage: BackupTubeApp.jar",
@@ -49,6 +51,34 @@ public class BackupTubeApp {
 
     private static boolean fileExists(String saveDir) {
         return new File(saveDir).exists();
+    }
+
+    private static String fixDir(String dir) {
+        if (! dir.endsWith("/")) {
+            dir += "/";
+        }
+
+        return dir;
+    }
+
+    private static boolean isGoodSaveDir(String saveDir) {
+        if (! fileExists(saveDir)) {
+            boolean wasCreated = new File(saveDir).mkdirs();
+
+            if (! wasCreated) {
+                return false; // permission error etc
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    private static void sendMessageIfBadSaveDir(boolean success) {
+        if (! success) {
+            System.err.println(badSaveDirMessage);
+        }
     }
 
     public static void main(String[] args) {
@@ -112,31 +142,25 @@ public class BackupTubeApp {
             }
         }
 
-        if (saveDir == null)  {
-            boolean success = false;
-            while (! success) {
-                try {
-                    saveDir = getLineFromConsole(reader, "Enter the directory to save the backed up data to:");
+        boolean success = false;
 
-                    if (! saveDir.endsWith("/")) {
-                        saveDir += "/";
-                    }
+        // if a save directory was given in the command, try to use it, otherwise ask for a new one
+        if (saveDir != null) {
+            saveDir = fixDir(saveDir);
+            success = isGoodSaveDir(saveDir);
+            sendMessageIfBadSaveDir(success);
+        }
 
-                    if (! fileExists(saveDir)) {
-                        boolean wasCreated = new File(saveDir).mkdirs();
-
-                        if (! wasCreated) {
-                            System.err.println("Unable to create directory there, please choose a different location");
-                        } else {
-                            success = true;
-                        }
-                    } else {
-                        success = true;
-                    }
-                } catch (UnableToReadFromConsoleException ex) {
-                    ex.printStackTrace();
-                    System.exit(0);
-                }
+        // if no save dir was provided or if it was a bad save dir, ask for a new one
+        while (! success) {
+            try {
+                saveDir = getLineFromConsole(reader, "Enter the directory to save the backed up data to:");
+                saveDir = fixDir(saveDir);
+                success = isGoodSaveDir(saveDir);
+                sendMessageIfBadSaveDir(success);
+            } catch (UnableToReadFromConsoleException ex) {
+                ex.printStackTrace();
+                System.exit(0);
             }
         }
 
