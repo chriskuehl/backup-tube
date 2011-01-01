@@ -8,6 +8,8 @@ import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.app.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
@@ -15,6 +17,7 @@ import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 import net.kuehldesign.backuptube.video.YouTubeVideo;
 import net.kuehldesign.jnetutils.FileDownloader;
+import net.kuehldesign.jnetutils.exception.FileAlreadyExistsException;
 
 public class BackupTubeApp {
     private static final String badSaveDirMessage = "Unable to create directory there, please choose a different location";
@@ -217,7 +220,15 @@ public class BackupTubeApp {
                     try {
                         video.init();
                         String downloadURL = video.getDownloadURL();
-                        FileDownloader d = new FileDownloader(new URL(downloadURL), saveDir + escapeFileName(video.getTitle()) + "." + video.getExtension());
+                        FileDownloader d = null;
+
+                        try {
+                            d = new FileDownloader(new URL(downloadURL), saveDir + escapeFileName(video.getTitle()) + "." + video.getExtension());
+                        } catch (FileAlreadyExistsException ex) {
+                            System.err.println("Unable to download video \"" + video.getTitle() + "\"; file already exists");
+                            break;
+                        }
+
                         d.startDownload();
                         boolean hasError = false;
 
