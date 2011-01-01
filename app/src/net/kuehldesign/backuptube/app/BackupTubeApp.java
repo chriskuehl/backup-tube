@@ -196,7 +196,7 @@ public class BackupTubeApp {
 
             for (YouTubeVideo video : videos) {
                 for (int downloadTry = 0; downloadTry < 3; downloadTry ++) {
-                    System.out.println("Starting try " + (downloadTry + 1) + "/3 to download \"" + video.getTitle() + "\"");
+                    //System.out.println("Starting try " + (downloadTry + 1) + "/3 to download \"" + video.getTitle() + "\"");
 
                     try {
                         video.init();
@@ -215,8 +215,9 @@ public class BackupTubeApp {
                             progress *= 10000;
                             progress = Math.round(progress);
                             progress /= 100;
+                            String progressMessage = "Progress (" + videoCount + "/" + totalVideoCount + " \"" + video.getTitle() + "\"): " + progress + "%    \r";
 
-                            System.out.println("Progress (" + videoCount + "/" + totalVideoCount + " \"" + video.getTitle() + "\"): " + progress + "%");
+                            System.out.print(progressMessage);
 
                             try {
                                 Thread.sleep(1000);
@@ -226,7 +227,11 @@ public class BackupTubeApp {
                         }
 
                         if (hasError) {
-                            System.out.println("Has error, starting new try.");
+                            if (downloadTry == 2) {
+                                System.err.println("Unable to download video \"" + video.getTitle() + "\"");
+                            } else {
+                                System.err.println("Has error, starting new try.");
+                            }
                             continue;
                         }
 
