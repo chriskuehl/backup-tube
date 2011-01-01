@@ -23,9 +23,13 @@ public class BackupTubeApp {
         String[] lines = {
                             "  usage: BackupTubeApp.jar",
                             "options:",
-                            "         --help          Dislays this help message",
-                            "         -u [username]   Specify a username to backup",
-                            "         -d [directory]  Specify a directory to save data to"
+                            "         --help                 Dislays this help message",
+                            "",
+                            "         --username [username]",
+                            "         -u [username]          Specify a username to backup",
+                            "",
+                            "         --savedir [directory]",
+                            "         -d [directory]         Specify a directory to save data to"
                          };
 
         for (String line : lines) {
@@ -118,6 +122,10 @@ public class BackupTubeApp {
                 } else {
                     saveDir = arg.substring(2);
                 }
+            } else if (arg.equals("--username")) {
+                expecting = "user";
+            } else if (arg.equals("--savedir")) {
+                expecting = "saveDir";
             } else {
                 System.err.println("Unexpected: " + arg);
                 isError = true;
