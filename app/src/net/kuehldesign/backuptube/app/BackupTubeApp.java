@@ -9,12 +9,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import net.kuehldesign.backuptube.BackupHelper;
-import net.kuehldesign.backuptube.FileDownloader;
 import net.kuehldesign.backuptube.app.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 import net.kuehldesign.backuptube.video.YouTubeVideo;
+import net.kuehldesign.jnetutils.FileDownloader;
 
 public class BackupTubeApp {
     private static final String badSaveDirMessage = "Unable to create directory there, please choose a different location";
