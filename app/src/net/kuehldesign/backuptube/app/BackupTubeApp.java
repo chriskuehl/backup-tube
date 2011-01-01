@@ -85,6 +85,22 @@ public class BackupTubeApp {
         }
     }
 
+    private static String escapeFileName(String fileName) {
+        String newFileName = "";
+        String alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIZJKLMNOPQRSTUV0234567890 ";
+
+        // make it alphanumeric for max compatibility
+        for (int i = 0; i < fileName.length(); i ++) {
+            String c = fileName.substring(i, i + 1);
+
+            if (alphanumeric.indexOf(c) > (- 1)) {
+                newFileName += c;
+            }
+        }
+
+        return newFileName;
+    }
+
     public static void main(String[] args) {
         boolean isError = false;
         boolean showHelp = false;
@@ -201,7 +217,7 @@ public class BackupTubeApp {
                     try {
                         video.init();
                         String downloadURL = video.getDownloadURL();
-                        FileDownloader d = new FileDownloader(new URL(downloadURL), saveDir + BackupHelper.escapeFileName(video.getTitle()) + "." + video.getExtension());
+                        FileDownloader d = new FileDownloader(new URL(downloadURL), saveDir + escapeFileName(video.getTitle()) + "." + video.getExtension());
                         d.startDownload();
                         boolean hasError = false;
 
