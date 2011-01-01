@@ -158,10 +158,4 @@ public class BackupHelper {
         
         return videos;
     }
-
-    public static String escapeFileName(String fileName) {
-        fileName = fileName.replaceAll("/", "-");
-        return fileName;
-    }
-
 }
