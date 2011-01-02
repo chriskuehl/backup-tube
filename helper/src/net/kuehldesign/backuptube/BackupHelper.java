@@ -20,7 +20,7 @@ import net.kuehldesign.backuptube.exception.UnableToGetSourceException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 
 public class BackupHelper {
-
+    // a test change
     public static final int FORMAT_3GP_LOW     = 1;
     public static final int FORMAT_3GP_MEDIUM  = 2;
     public static final int FORMAT_3GP_HIGH    = 3;
