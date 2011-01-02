@@ -1,16 +1,14 @@
 package net.kuehldesign.backuptube.app;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.kuehldesign.backuptube.BackupHelper;
+import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
@@ -56,52 +54,10 @@ public class BackupTubeApp {
         return line;
     }
 
-    private static boolean fileExists(String saveDir) {
-        return new File(saveDir).exists();
-    }
-
-    private static String fixDir(String dir) {
-        if (! dir.endsWith("/")) {
-            dir += "/";
-        }
-
-        return dir;
-    }
-
-    private static boolean isGoodSaveDir(String saveDir) {
-        if (! fileExists(saveDir)) {
-            boolean wasCreated = new File(saveDir).mkdirs();
-
-            if (! wasCreated) {
-                return false; // permission error etc
-            } else {
-                return true;
-            }
-        } else {
-            return true;
-        }
-    }
-
     private static void sendMessageIfBadSaveDir(boolean success) {
         if (! success) {
             System.err.println(badSaveDirMessage);
         }
-    }
-
-    private static String escapeFileName(String fileName) {
-        String newFileName = "";
-        String alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIZJKLMNOPQRSTUV0234567890 ";
-
-        // make it alphanumeric for max compatibility
-        for (int i = 0; i < fileName.length(); i ++) {
-            String c = fileName.substring(i, i + 1);
-
-            if (alphanumeric.indexOf(c) > (- 1)) {
-                newFileName += c;
-            }
-        }
-
-        return newFileName;
     }
 
     public static void main(String[] args) {
@@ -173,8 +129,8 @@ public class BackupTubeApp {
 
         // if a save directory was given in the command, try to use it, otherwise ask for a new one
         if (saveDir != null) {
-            saveDir = fixDir(saveDir);
-            success = isGoodSaveDir(saveDir);
+            saveDir = BackupTubeCommon.fixDir(saveDir);
+            success = BackupTubeCommon.isGoodSaveDir(saveDir);
             sendMessageIfBadSaveDir(success);
         }
 
@@ -182,8 +138,8 @@ public class BackupTubeApp {
         while (! success) {
             try {
                 saveDir = getLineFromConsole(reader, "Enter the directory to save the backed up data to:");
-                saveDir = fixDir(saveDir);
-                success = isGoodSaveDir(saveDir);
+                saveDir = BackupTubeCommon.fixDir(saveDir);
+                success = BackupTubeCommon.isGoodSaveDir(saveDir);
                 sendMessageIfBadSaveDir(success);
             } catch (UnableToReadFromConsoleException ex) {
                 ex.printStackTrace();
@@ -223,7 +179,7 @@ public class BackupTubeApp {
                         FileDownloader d = null;
 
                         try {
-                            d = new FileDownloader(new URL(downloadURL), saveDir + escapeFileName(video.getTitle()) + "." + video.getExtension());
+                            d = new FileDownloader(new URL(downloadURL), saveDir + BackupTubeCommon.escapeFileName(video.getTitle()) + "." + video.getExtension());
                         } catch (FileAlreadyExistsException ex) {
                             System.err.println("Unable to download video \"" + video.getTitle() + "\"; file already exists");
                             break;
