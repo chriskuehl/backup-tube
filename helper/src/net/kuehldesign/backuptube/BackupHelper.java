@@ -116,7 +116,7 @@ public class BackupHelper {
     }
 
     public LinkedList<YouTubeVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
-        LinkedList<YouTubeVideo> videos = new ArrayList();
+        LinkedList<YouTubeVideo> videos = new LinkedList();
         int total = (- 1);
         int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
         int i = 0;
