@@ -12,13 +12,13 @@ public class BackupTubeCommon {
 
     public static String escapeFileName(String fileName) {
         String newFileName = "";
-        String alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIZJKLMNOPQRSTUV0234567890 ";
+        String allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIZJKLMNOPQRSTUV0234567890 ";
 
         // make it alphanumeric for max compatibility
         for (int i = 0; i < fileName.length(); i ++) {
             String c = fileName.substring(i, i + 1);
 
-            if (alphanumeric.indexOf(c) > (- 1)) {
+            if (allowedCharacters.indexOf(c) > (- 1)) {
                 newFileName += c;
             }
         }
