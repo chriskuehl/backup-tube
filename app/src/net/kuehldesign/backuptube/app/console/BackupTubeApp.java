@@ -22,7 +22,7 @@ import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleE
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
-import net.kuehldesign.backuptube.video.YouTubeVideo;
+import net.kuehldesign.backuptube.site.youtube.YouTubeVideo;
 import net.kuehldesign.jnetutils.FileDownloader;
 import net.kuehldesign.jnetutils.exception.FileAlreadyExistsException;
 
