@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.datafile.BackupTubeDataFile;
@@ -172,7 +172,7 @@ public class BackupTubeApp {
         BackupHelper helper = new BackupHelper();
         helper.setUser(user);
 
-        ArrayList<YouTubeVideo> videos = null;
+        LinkedList<YouTubeVideo> videos = null;
 
         try {
             videos = helper.getVideos();
@@ -183,6 +183,12 @@ public class BackupTubeApp {
             System.err.println("Unable to open URL connection; does YouTube account exist?");
             ex.printStackTrace();
         }
+
+        // before downloading, save the
+        // TODO: update this each time after downloading
+        BackupTubeDataFile newDataFile = new BackupTubeDataFile();
+        newDataFile.setLastUpdated(BackupTubeCommon.getCurrentTime());
+        newDataFile.setVideos(videos);
 
         // now, start downloading the videos
         try {
