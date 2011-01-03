@@ -1,6 +1,7 @@
 package net.kuehldesign.backuptube.app.common;
 
 import java.io.File;
+import java.util.Date;
 
 public class BackupTubeCommon {
     // locations of various files and directories; directories should NOT have a trailing slash
@@ -50,5 +51,9 @@ public class BackupTubeCommon {
         }
 
         return dir;
+    }
+
+    public static long getCurrentTime() {
+        return new Date().getTime();
     }
 }
