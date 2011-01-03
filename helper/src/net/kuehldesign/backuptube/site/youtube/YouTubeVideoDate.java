@@ -1,4 +1,4 @@
-package net.kuehldesign.backuptube.video;
+package net.kuehldesign.backuptube.site.youtube;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

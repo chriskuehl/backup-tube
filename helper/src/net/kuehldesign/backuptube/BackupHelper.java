@@ -1,7 +1,7 @@
 package net.kuehldesign.backuptube;
 
-import net.kuehldesign.backuptube.video.YouTubeVideo;
-import net.kuehldesign.backuptube.video.YouTubeVideoGroup;
+import net.kuehldesign.backuptube.site.youtube.YouTubeVideo;
+import net.kuehldesign.backuptube.site.youtube.YouTubeVideoGroup;
 import com.google.gson.Gson;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
