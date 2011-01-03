@@ -1,11 +1,11 @@
 package net.kuehldesign.backuptube.video;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public class YouTubeVideoGroup {
     private YouTubeVideoFeed feed;
 
-    public List<YouTubeVideo> getVideos() {
+    public LinkedList<YouTubeVideo> getVideos() {
         return feed.getVideos();
     }
 

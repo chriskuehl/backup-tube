@@ -13,7 +13,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.MalformedFeedURLException;
 import net.kuehldesign.backuptube.exception.UnableToGetSourceException;
@@ -115,8 +115,8 @@ public class BackupHelper {
         }
     }
 
-    public ArrayList<YouTubeVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
-        ArrayList<YouTubeVideo> videos = new ArrayList();
+    public LinkedList<YouTubeVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
+        LinkedList<YouTubeVideo> videos = new ArrayList();
         int total = (- 1);
         int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
         int i = 0;
@@ -141,7 +141,7 @@ public class BackupHelper {
                 throw new UnableToOpenURLConnectionException("Unable to open URL connection; does YouTube video exist?");
             }
 
-            List<YouTubeVideo> feedVideos = videoGroup.getVideos();
+            LinkedList<YouTubeVideo> feedVideos = videoGroup.getVideos();
 
             if (feedVideos != null) {
                 total = feedVideos.size();
