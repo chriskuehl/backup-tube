@@ -147,8 +147,6 @@ public class BackupTubeApp {
             }
         }
 
-        System.out.println("User: '" + user + "', saveDir: '" + saveDir + "'");
-
         BackupHelper helper = new BackupHelper();
         helper.setUser(user);
 
