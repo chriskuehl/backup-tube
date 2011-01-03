@@ -3,6 +3,13 @@ package net.kuehldesign.backuptube.app.common;
 import java.io.File;
 
 public class BackupTubeCommon {
+    // locations of various files and directories; directories should NOT have a trailing slash
+    private final String LOCATION_VIDEOS = "Videos";
+    private final String LOCATION_VIDEOS_DELETED = "Deleted Videos";
+    private final String LOCATION_VIDEO = ""; // video file, relative to video's folder, if using another dir REQUIRES a trailing slash
+    private final String LOCATION_VIDEO_DATAFILE = "video.json"; // data for each video, relative to the video's folder
+    private final String LOCATION_DATAFILE = "data.json"; // data in the root directory with info on all videos
+
     public static String escapeFileName(String fileName) {
         String newFileName = "";
         String alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIZJKLMNOPQRSTUV0234567890 ";
