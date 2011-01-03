@@ -198,7 +198,7 @@ public class BackupTubeApp {
                             progress /= 100;
                             String progressMessage = "Progress (" + videoCount + "/" + totalVideoCount + " \"" + video.getTitle() + "\"): " + progress + "%    \r";
 
-                            System.out.print(progressMessage);
+                            System.out.print(progressMessage); // using print instead of println since using \r for progress
 
                             try {
                                 Thread.sleep(1000);
