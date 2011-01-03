@@ -3,7 +3,7 @@
 package net.kuehldesign.backuptube.app.common.datafile;
 
 import java.util.LinkedList;
-import net.kuehldesign.backuptube.video.YouTubeVideo;
+import net.kuehldesign.backuptube.site.youtube.YouTubeVideo;
 
 
 public class BackupTubeDataFile {
