@@ -1,16 +1,20 @@
 package net.kuehldesign.backuptube.app.console;
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.datafile.BackupTubeDataFile;
@@ -189,6 +193,19 @@ public class BackupTubeApp {
         BackupTubeDataFile newDataFile = new BackupTubeDataFile();
         newDataFile.setLastUpdated(BackupTubeCommon.getCurrentTime());
         newDataFile.setVideos(videos);
+
+        if (dataFeedFile.exists()) { // if there is an old file,
+            dataFeedFile.delete(); // try to delete it
+        }
+
+        JsonWriter writer;
+        try {
+            writer = new JsonWriter(new FileWriter(dataFeedFile));
+            new Gson().toJson(newDataFile, BackupTubeDataFile.class, writer);
+        } catch (IOException ex) {
+            System.err.println("Fatal error: Unable to write the main data file");
+            System.exit(0);
+        }
 
         // now, start downloading the videos
         try {
