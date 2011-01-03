@@ -1,14 +1,21 @@
 package net.kuehldesign.backuptube.app.console;
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
+import net.kuehldesign.backuptube.app.common.datafile.BackupTubeDataFile;
 import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
@@ -144,6 +151,23 @@ public class BackupTubeApp {
             } catch (UnableToReadFromConsoleException ex) {
                 ex.printStackTrace();
                 System.exit(0);
+            }
+        }
+
+        // check if there's already a data feed; if so, load from it
+        File dataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_DATAFILE);
+
+        if (dataFeedFile.exists()) {
+            try {
+                BackupTubeDataFile dataFeed = new Gson().fromJson(new BufferedReader(new FileReader(dataFeedFile)), BackupTubeDataFile.class);
+                
+                for (YouTubeVideo video : dataFeed.getVideos()) {
+                    /* if (video.hasBeenDeleted()) {
+                        // has been deleted
+                    } */
+                }
+            } catch (FileNotFoundException ex) {
+                // data feed doesn't actually exist; this shouldn't happen (checked above)
             }
         }
 
