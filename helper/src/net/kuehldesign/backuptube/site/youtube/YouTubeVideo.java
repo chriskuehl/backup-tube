@@ -34,11 +34,11 @@ public class YouTubeVideo implements DownloadableVideo {
         return published.getDate();
     }
 
-    public String getURL() {
+    public String getURL() { // TODO: simplify this
         return link.get(0).getURL();
     }
 
-    public String getID() {
+    public String getVideoID() {
         String url = getURL();
         return BackupHelper.between(url, "?v=", "&feature");
     }
@@ -60,7 +60,7 @@ public class YouTubeVideo implements DownloadableVideo {
                 String infoSource;
 
                 try {
-                    infoSource = JNetUtils.getSource("http://www.youtube.com/get_video_info?video_id=" + getID());
+                    infoSource = JNetUtils.getSource("http://www.youtube.com/get_video_info?video_id=" + getVideoID());
                 } catch (UnableToGetSourceException ex) {
                     throw new BadVideoException("Unable to get source for info");
                 }
