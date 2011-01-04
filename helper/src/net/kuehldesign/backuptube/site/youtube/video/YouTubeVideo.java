@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
+import net.kuehldesign.backuptube.site.youtube.YouTubeHelper;
 import net.kuehldesign.backuptube.video.DownloadableVideo;
 import net.kuehldesign.jnetutils.JNetUtils;
 import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
@@ -106,51 +107,51 @@ public class YouTubeVideo implements DownloadableVideo {
             }
 
             // qual is an identifier based on the type of video it is (e.g. MP4 High Quality)
-            int format = 0;;
+            int format = 0;
 
             switch (Integer.valueOf(qual)) {
                 case 13:
-                    format = BackupHelper.FORMAT_3GP_LOW;
+                    format = YouTubeHelper.FORMAT_3GP_LOW;
                 break;
 
                 case 16:
-                    format = BackupHelper.FORMAT_3GP_MEDIUM;
+                    format = YouTubeHelper.FORMAT_3GP_MEDIUM;
                 break;
 
                 case 36:
-                    format = BackupHelper.FORMAT_3GP_HIGH;
+                    format = YouTubeHelper.FORMAT_3GP_HIGH;
                 break;
 
                 case 5:
-                    format = BackupHelper.FORMAT_FLV_LOW;
+                    format = YouTubeHelper.FORMAT_FLV_LOW;
                 break;
 
                 case 34:
-                    format = BackupHelper.FORMAT_FLV_MEDIUM;
+                    format = YouTubeHelper.FORMAT_FLV_MEDIUM;
                 break;
 
                 case 6:
-                    format = BackupHelper.FORMAT_FLV_MEDIUM2;
+                    format = YouTubeHelper.FORMAT_FLV_MEDIUM2;
                 break;
 
                 case 35:
-                    format = BackupHelper.FORMAT_FLV_HIGH;
+                    format = YouTubeHelper.FORMAT_FLV_HIGH;
                 break;
 
                 case 18:
-                    format = BackupHelper.FORMAT_MP4_HIGH;
+                    format = YouTubeHelper.FORMAT_MP4_HIGH;
                 break;
 
                 case 22:
-                    format = BackupHelper.FORMAT_MP4_720P;
+                    format = YouTubeHelper.FORMAT_MP4_720P;
                 break;
 
                 case 37:
-                    format = BackupHelper.FORMAT_MP4_1080P;
+                    format = YouTubeHelper.FORMAT_MP4_1080P;
                 break;
 
                 case 38:
-                    format = BackupHelper.FORMAT_MP4_4K;
+                    format = YouTubeHelper.FORMAT_MP4_4K;
                 break;
             }
 
@@ -162,9 +163,9 @@ public class YouTubeVideo implements DownloadableVideo {
     }
 
     public String getExtension() {
-        if (cacheFormatValue >= BackupHelper.FORMAT_MP4_HIGH) {
+        if (cacheFormatValue >= YouTubeHelper.FORMAT_MP4_HIGH) {
             return "mp4";
-        } else if (cacheFormatValue >= BackupHelper.FORMAT_FLV_LOW) {
+        } else if (cacheFormatValue >= YouTubeHelper.FORMAT_FLV_LOW) {
             return "flv";
         } else {
             return "3gp";

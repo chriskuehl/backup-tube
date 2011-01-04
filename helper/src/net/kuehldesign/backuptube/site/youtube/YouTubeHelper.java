@@ -17,19 +17,22 @@ import net.kuehldesign.backuptube.site.youtube.video.YouTubeVideoGroup;
 import net.kuehldesign.backuptube.video.DownloadableVideo;
 
 public class YouTubeHelper {
+    public static final int FORMAT_3GP_LOW     = 1;
+    public static final int FORMAT_3GP_MEDIUM  = 2;
+    public static final int FORMAT_3GP_HIGH    = 3;
+    public static final int FORMAT_FLV_LOW     = 4;
+    public static final int FORMAT_FLV_MEDIUM  = 5;
+    public static final int FORMAT_FLV_MEDIUM2 = 6;
+    public static final int FORMAT_FLV_HIGH    = 7;
+    public static final int FORMAT_MP4_HIGH    = 8;
+    public static final int FORMAT_MP4_720P    = 9;
+    public static final int FORMAT_MP4_1080P   = 10;
+    public static final int FORMAT_MP4_4K      = 11;
+    
     private static int maxResults = 50;
 
     public static int getMaxResults() {
         return maxResults;
-    }
-
-    public static String between(String content, String first, String last) {
-        /* content = content.substring(content.indexOf(first) + first.length());
-        content = content.substring(0, content.indexOf(last));
-
-        return content; */
-
-        return betweenMore(content, first, last, 1);
     }
 
     public static URL getFeedURL(String user, int startIndex) throws FatalBackupException, MalformedFeedURLException {
@@ -43,20 +46,6 @@ public class YouTubeHelper {
         } catch (MalformedURLException ex) {
             throw new MalformedFeedURLException("Malformed URL [101]");
         }
-    }
-
-    public static String betweenMore(String content, String first, String last, int index) {
-        try {
-            for (int i = 0; i < index; i ++) {
-                content = content.substring(content.indexOf(first) + first.length());
-            }
-
-            content = content.substring(0, content.indexOf(last));
-        } catch (Exception ex) {
-            return null;
-        }
-
-        return content;
     }
 
     public static LinkedList<DownloadableVideo> getVideos(String user) throws FatalBackupException, UnableToOpenURLConnectionException {
