@@ -12,13 +12,14 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.datafile.BackupTubeDataFile;
 import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
+import net.kuehldesign.backuptube.app.common.stored.youtube.StoredYouTubeVideo;
 import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
@@ -219,9 +220,13 @@ public class BackupTubeApp {
                         video.init();
                         String downloadURL = video.getDownloadURL();
                         FileDownloader d = null;
+                        String safeVideoTitle = BackupTubeCommon.escapeFileName(video.getTitle());
+                        SimpleDateFormat published = new SimpleDateFormat("yyyy_MM_dd");
+                        Date date = new Date(video.getPublished());
+                        String videoFolder = published.format(date) + " " + safeVideoTitle;
 
                         try {
-                            d = new FileDownloader(new URL(downloadURL), saveDir + BackupTubeCommon.escapeFileName(video.getTitle()) + "." + video.getExtension());
+                            d = new FileDownloader(new URL(downloadURL), saveDir + videoFolder + "/" + safeVideoTitle + "." + video.getExtension());
                         } catch (FileAlreadyExistsException ex) {
                             System.err.println("Unable to download video \"" + video.getTitle() + "\"; file already exists");
                             break;
@@ -261,16 +266,29 @@ public class BackupTubeApp {
                         }
 
                         System.out.println("Successfully downloaded video \"" + video.getTitle() + "\"");
-                        
-                        // now update the JSON file since the file has been downloaded
-                        
-                        // get the current data object
-                        BackupTubeDataFile dataFile = getDataFile();
 
-                        // delete the data file if it exists
-                        if (dataFeedFile.exists()) { // if there is an old file,
-                            dataFeedFile.delete(); // try to delete it
+                        // now update the JSON file since the file has been downloaded
+
+                        // created the StoredVideo object
+                        // TODO: add a better way to deal with type (e.g. YouTube vs another site)
+                        StoredYouTubeVideo storedVideo = new StoredYouTubeVideo();
+
+                        storedVideo.setTitle(video.getTitle());
+                        storedVideo.setDownloadedTime(BackupTubeCommon.getCurrentTime());
+                        storedVideo.setFolderName(folderName);
+                        storedVideo.setVideoID(video.getID());
+
+                        // get the current data object
+                        BackupTubeDataFile dataFile;
+
+                        try {
+                            dataFile = getDataFile(dataFeedFile);
+                        } catch (NullPointerException ex) {
+                            dataFile = new BackupTubeDataFile();
                         }
+
+                        LinkedList<StoredVideo> videos = dataFile.getVideos();
+                        videos.add(storedVideo);
 
                         break;
                     } catch (BadVideoException ex) {
