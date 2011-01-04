@@ -285,6 +285,7 @@ public class BackupTubeApp {
                             dataFile = getDataFile(dataFeedFile);
                         } catch (NullPointerException ex) {
                             dataFile = new BackupTubeDataFile();
+                            dataFile.setVideos(new LinkedList<StoredVideo>());
                         }
 
                         LinkedList<StoredVideo> storedVideos = dataFile.getVideos();
