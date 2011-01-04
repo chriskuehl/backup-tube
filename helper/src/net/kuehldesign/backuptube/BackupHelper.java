@@ -1,19 +1,14 @@
 package net.kuehldesign.backuptube;
 
-import net.kuehldesign.backuptube.site.youtube.video.YouTubeVideo;
-import net.kuehldesign.backuptube.site.youtube.video.YouTubeVideoGroup;
-import com.google.gson.Gson;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.MalformedFeedURLException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
+import net.kuehldesign.backuptube.site.youtube.YouTubeHelper;
 import net.kuehldesign.backuptube.video.DownloadableVideo;
 
 public class BackupHelper {
@@ -34,29 +29,6 @@ public class BackupHelper {
 
     private String siteID;
 
-    public static String between(String content, String first, String last) {
-        /* content = content.substring(content.indexOf(first) + first.length());
-        content = content.substring(0, content.indexOf(last));
-
-        return content; */
-
-        return betweenMore(content, first, last, 1);
-    }
-
-    public static String betweenMore(String content, String first, String last, int index) {
-        try {
-            for (int i = 0; i < index; i ++) {
-                content = content.substring(content.indexOf(first) + first.length());
-            }
-
-            content = content.substring(0, content.indexOf(last));
-        } catch (Exception ex) {
-            return null;
-        }
-        
-        return content;
-    }
-
     String user;
     int maxResults = 50;
 
@@ -72,76 +44,13 @@ public class BackupHelper {
         return user;
     }
 
-    public int getMaxResults() {
-        return maxResults;
-    }
-    
-    public void setMaxResults(int maxResults) {
-        this.maxResults = maxResults;
-    }
-
-    public URL getFeedURL(int startIndex) throws FatalBackupException, MalformedFeedURLException {
-        // max-results is 50
-        // start-index should increase by 50
-
-        try {
-            return new URL("http://gdata.youtube.com/feeds/api/users/" + URLEncoder.encode(getUser(), "UTF-8") + "/uploads?max-results=" + URLEncoder.encode(String.valueOf(getMaxResults()), "UTF-8") + "&alt=json&start-index=" + URLEncoder.encode(String.valueOf(startIndex), "UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-            throw new FatalBackupException("UTF-8 encoding not supported");
-        } catch (MalformedURLException ex) {
-            throw new MalformedFeedURLException("Malformed URL [101]");
-        }
-    }
-
     public String getSiteID() {
         return siteID;
     }
 
     public LinkedList<DownloadableVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
-        LinkedList<DownloadableVideo> videos = new LinkedList();
-        
-        // TODO: create a handler for each site
         if (getSiteID().equals(SITE_YOUTUBE)) {
-            int total = (- 1);
-            int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
-            int i = 0;
-
-            while (true) { // this is broken out of when the videos are all added
-                URL url;
-
-                try {
-                    url = getFeedURL(startIndex);
-                } catch (MalformedFeedURLException ex) {
-                    throw new FatalBackupException("Unable to get feed URL");
-                }
-
-                URLConnection connection;
-
-                YouTubeVideoGroup videoGroup;
-
-                try {
-                    connection = url.openConnection();
-                    videoGroup = new Gson().fromJson(new InputStreamReader(connection.getInputStream()), YouTubeVideoGroup.class);
-                } catch (IOException ex) {
-                    throw new UnableToOpenURLConnectionException("Unable to open URL connection; does YouTube video exist?");
-                }
-
-                LinkedList<YouTubeVideo> feedVideos = videoGroup.getVideos();
-
-                if (feedVideos != null) {
-                    total = feedVideos.size();
-
-                    for (YouTubeVideo video : feedVideos) {
-                        videos.add(video);
-                    }
-
-                    startIndex += total;
-                } else {
-                    break;
-                }
-            }
-
-            return videos;
+            return YouTubeHelper.getVideos(getUser());
         } else {
             return null;
         }
