@@ -7,10 +7,11 @@ import java.util.LinkedList;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
+import net.kuehldesign.backuptube.video.DownloadableVideo;
 import net.kuehldesign.jnetutils.JNetUtils;
 import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
 
-public class YouTubeVideo {
+public class YouTubeVideo implements DownloadableVideo {
     private YouTubeVideoTitle title;
     private YouTubeVideoDescription content;
     private YouTubeVideoDate published;
@@ -189,6 +190,10 @@ public class YouTubeVideo {
         if (getURL() == null || getURL().length() <= 0) {
             throw new BadVideoException("Couldn't get a URL");
         }
+    }
+
+    public String getSiteID() {
+        return BackupHelper.SITE_YOUTUBE;
     }
 
     public YouTubeVideo() {

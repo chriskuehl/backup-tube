@@ -29,6 +29,7 @@ public class BackupHelper {
     public static final int FORMAT_MP4_1080P   = 10;
     public static final int FORMAT_MP4_4K      = 11;
 
+    public static final String SITE_YOUTUBE = "youtube";
 
     public static String between(String content, String first, String last) {
         /* content = content.substring(content.indexOf(first) + first.length());
