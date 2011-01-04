@@ -275,7 +275,7 @@ public class BackupTubeApp {
 
                         storedVideo.setTitle(video.getTitle());
                         storedVideo.setDownloadedTime(BackupTubeCommon.getCurrentTime());
-                        storedVideo.setFolderName(folderName);
+                        storedVideo.setFolderName(videoFolder);
                         storedVideo.setVideoID(video.getID());
 
                         // get the current data object
@@ -287,9 +287,10 @@ public class BackupTubeApp {
                             dataFile = new BackupTubeDataFile();
                         }
 
-                        LinkedList<StoredVideo> videos = dataFile.getVideos();
-                        videos.add(storedVideo);
-
+                        LinkedList<StoredVideo> storedVideos = dataFile.getVideos();
+                        storedVideos.add(storedVideo);
+                        
+                        saveDataFile(dataFeedFile, dataFile);
                         break;
                     } catch (BadVideoException ex) {
                         ex.printStackTrace();
