@@ -1,9 +1,5 @@
 package net.kuehldesign.backuptube.app.common.stored.youtube;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
 import net.kuehldesign.jnetutils.JNetUtils;
 import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
