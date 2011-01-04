@@ -133,7 +133,7 @@ public class BackupTubeApp {
                 } else {
                     saveDir = arg.substring(2);
                 }
-            } else if (args.startsWith("-s")) {
+            } else if (arg.startsWith("-s")) {
                 if (arg.equals("-s")) {
                     expecting = "site";
                 } else {
