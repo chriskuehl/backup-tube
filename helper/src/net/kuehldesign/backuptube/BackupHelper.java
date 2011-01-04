@@ -101,7 +101,7 @@ public class BackupHelper {
         LinkedList<DownloadableVideo> videos = new LinkedList();
         
         // TODO: create a handler for each site
-        if (getSiteID() == SITE_YOUTUBE) {
+        if (getSiteID().equals(SITE_YOUTUBE)) {
             int total = (- 1);
             int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
             int i = 0;
