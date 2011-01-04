@@ -1,4 +1,4 @@
-package net.kuehldesign.backuptube.site.youtube;
+package net.kuehldesign.backuptube.site.youtube.video;
 
 public class YouTubeVideoLink {
     private String type;

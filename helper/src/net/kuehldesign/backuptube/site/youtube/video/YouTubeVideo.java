@@ -1,4 +1,4 @@
-package net.kuehldesign.backuptube.site.youtube;
+package net.kuehldesign.backuptube.site.youtube.video;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
