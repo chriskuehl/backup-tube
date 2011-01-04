@@ -99,7 +99,8 @@ public class BackupHelper {
 
     public LinkedList<DownloadableVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
         LinkedList<DownloadableVideo> videos = new LinkedList();
-
+        
+        // TODO: create a handler for each site
         if (getSiteID() == SITE_YOUTUBE) {
             int total = (- 1);
             int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
