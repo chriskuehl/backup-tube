@@ -106,7 +106,7 @@ public class BackupHelper {
             int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
             int i = 0;
 
-            while (true) {
+            while (true) { // this is broken out of when the videos are all added
                 URL url;
 
                 try {
