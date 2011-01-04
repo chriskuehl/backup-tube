@@ -1,12 +1,7 @@
 package net.kuehldesign.backuptube;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.LinkedList;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
-import net.kuehldesign.backuptube.exception.MalformedFeedURLException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 import net.kuehldesign.backuptube.site.youtube.YouTubeHelper;
 import net.kuehldesign.backuptube.video.DownloadableVideo;
