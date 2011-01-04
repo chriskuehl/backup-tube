@@ -25,6 +25,7 @@ import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 import net.kuehldesign.backuptube.site.youtube.YouTubeVideo;
+import net.kuehldesign.backuptube.video.DownloadableVideo;
 import net.kuehldesign.jnetutils.FileDownloader;
 import net.kuehldesign.jnetutils.exception.FileAlreadyExistsException;
 
@@ -192,10 +193,11 @@ public class BackupTubeApp {
             // data file doesn't exist yet
         }
 
-        BackupHelper helper = new BackupHelper();
+        // TODO: add a command to ask for site ID
+        BackupHelper helper = new BackupHelper(BackupHelper.SITE_YOUTUBE);
         helper.setUser(user);
 
-        LinkedList<YouTubeVideo> videos = null;
+        LinkedList<DownloadableVideo> videos = null;
 
         try {
             videos = helper.getVideos();
@@ -212,7 +214,7 @@ public class BackupTubeApp {
             int videoCount = 0;
             int totalVideoCount = videos.size();
 
-            for (YouTubeVideo video : videos) {
+            for (DownloadableVideo video : videos) {
                 for (int downloadTry = 0; downloadTry < 3; downloadTry ++) {
                     //System.out.println("Starting try " + (downloadTry + 1) + "/3 to download \"" + video.getTitle() + "\"");
 
@@ -276,7 +278,8 @@ public class BackupTubeApp {
                         storedVideo.setTitle(video.getTitle());
                         storedVideo.setDownloadedTime(BackupTubeCommon.getCurrentTime());
                         storedVideo.setFolderName(videoFolder);
-                        storedVideo.setVideoID(video.getID());
+                        storedVideo.setSiteID(video.getSiteID());
+                        storedVideo.setVideoID(video.getVideoID());
 
                         // get the current data object
                         BackupTubeDataFile dataFile;
