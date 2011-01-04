@@ -40,6 +40,9 @@ public class BackupTubeApp {
                             "         --username [username]",
                             "         -u [username]          Specify a username to backup",
                             "",
+                            "         -s [siteid]",
+                            "         --site [siteid]        Specify a site ID (e.g. \"youtube\")",
+                            "",
                             "         --savedir [directory]",
                             "         -d [directory]         Specify a directory to save data to"
                          };
@@ -96,6 +99,7 @@ public class BackupTubeApp {
         String user = null;
         String saveDir = null;
         String expecting = null;
+        String site = null;
 
         for (String arg : args) {
             if (expecting != null) {
@@ -103,6 +107,8 @@ public class BackupTubeApp {
                     user = arg;
                 } else if (expecting.equals("saveDir")) {
                     saveDir = arg;
+                } else if (expecting.equals("site")) {
+                    site = arg;
                 } else {
                     System.err.println("Unexpected: " + arg);
                     isError = true;
@@ -127,10 +133,18 @@ public class BackupTubeApp {
                 } else {
                     saveDir = arg.substring(2);
                 }
+            } else if (args.startsWith("-s")) {
+                if (arg.equals("-s")) {
+                    expecting = "site";
+                } else {
+                    site = arg.substring(2);
+                }
             } else if (arg.equals("--username")) {
                 expecting = "user";
             } else if (arg.equals("--savedir")) {
                 expecting = "saveDir";
+            } else if (arg.equals("--site")) {
+                expecting = "site";
             } else {
                 System.err.println("Unexpected: " + arg);
                 isError = true;
@@ -145,6 +159,15 @@ public class BackupTubeApp {
 
         InputStreamReader inreader = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(inreader);
+
+        if (site == null) {
+            try {
+                site = getLineFromConsole(reader, "Enter the site to backup from (e.g. \"youtube\"):");
+            } catch (UnableToReadFromConsoleException ex) {
+                ex.printStackTrace();
+                System.exit(0);
+            }
+        }
 
         if (user == null) {
             try {
@@ -179,6 +202,7 @@ public class BackupTubeApp {
 
         // check if there's already a data feed; if so, load from it
         File dataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_DATAFILE);
+
         try {
             BackupTubeDataFile prevDataFile = getDataFile(dataFeedFile);
 
@@ -192,8 +216,7 @@ public class BackupTubeApp {
             // data file doesn't exist yet
         }
 
-        // TODO: add a command to ask for site ID
-        BackupHelper helper = new BackupHelper(BackupHelper.SITE_YOUTUBE);
+        BackupHelper helper = new BackupHelper(site);
         helper.setUser(user);
 
         LinkedList<DownloadableVideo> videos = null;
