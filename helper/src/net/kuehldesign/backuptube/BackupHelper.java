@@ -31,6 +31,8 @@ public class BackupHelper {
 
     public static final String SITE_YOUTUBE = "youtube";
 
+    private String siteID;
+
     public static String between(String content, String first, String last) {
         /* content = content.substring(content.indexOf(first) + first.length());
         content = content.substring(0, content.indexOf(last));
@@ -57,8 +59,8 @@ public class BackupHelper {
     String user;
     int maxResults = 50;
 
-    public BackupHelper() {
-
+    public BackupHelper(String siteID) {
+        this.siteID = siteID;
     }
 
     public void setUser(String user) {
