@@ -9,5 +9,6 @@ public interface DownloadableVideo {
     public long getPublished();
     public String getURL();
     public String getSiteID();
+    public String getDownloadURL();
     public void init() throws FatalBackupException, BadVideoException;
 }
