@@ -141,6 +141,8 @@ public class BackupHelper {
             }
 
             return videos;
+        } else {
+            return null;
         }
     }
 }
