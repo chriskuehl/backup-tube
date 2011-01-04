@@ -226,9 +226,11 @@ public class BackupTubeApp {
         } catch (FatalBackupException ex) {
             System.err.println("Fatal exception: " + ex.getMessage());
             ex.printStackTrace();
+            System.exit(0);
         } catch (UnableToOpenURLConnectionException ex) {
-            System.err.println("Unable to open URL connection; does YouTube account exist?");
+            System.err.println("Unable to open URL connection; does account exist?");
             ex.printStackTrace();
+            System.exit(0);
         }
 
         // now, start downloading the videos
