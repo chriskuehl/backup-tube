@@ -3,20 +3,20 @@
 package net.kuehldesign.backuptube.app.common.datafile;
 
 import java.util.LinkedList;
-import net.kuehldesign.backuptube.site.youtube.YouTubeVideo;
+import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
 
 
 public class BackupTubeDataFile {
     // videos will be looped through to check for videos which have been deleted
     // and also possibly to display a library -- not sure yet
-    private LinkedList<YouTubeVideo> videos;
+    private LinkedList<StoredVideo> videos;
     private long lastUpdated;
 
-    public void setVideos(LinkedList<YouTubeVideo> videos) {
+    public void setVideos(LinkedList<StoredVideo> videos) {
         this.videos = videos;
     }
 
-    public LinkedList<YouTubeVideo> getVideos() {
+    public LinkedList<StoredVideo> getVideos() {
         return videos;
     }
 
