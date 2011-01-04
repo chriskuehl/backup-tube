@@ -7,7 +7,8 @@ import java.util.LinkedList;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
-import net.kuehldesign.backuptube.exception.UnableToGetSourceException;
+import net.kuehldesign.jnetutils.JNetUtils;
+import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
 
 public class YouTubeVideo {
     private YouTubeVideoTitle title;
@@ -58,7 +59,7 @@ public class YouTubeVideo {
                 String infoSource;
 
                 try {
-                    infoSource = BackupHelper.getSource("http://www.youtube.com/get_video_info?video_id=" + getID());
+                    infoSource = JNetUtils.getSource("http://www.youtube.com/get_video_info?video_id=" + getID());
                 } catch (UnableToGetSourceException ex) {
                     throw new BadVideoException("Unable to get source for info");
                 }
@@ -174,8 +175,8 @@ public class YouTubeVideo {
         String source18;
 
         try {
-            source = BackupHelper.getSource(getURL());
-            source18 = BackupHelper.getSource(getURL() + "&fmt=18");
+            source = JNetUtils.getSource(getURL());
+            source18 = JNetUtils.getSource(getURL() + "&fmt=18");
 
             cacheToken = findToken(source);
         } catch (Exception ex) {

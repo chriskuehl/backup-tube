@@ -3,9 +3,7 @@ package net.kuehldesign.backuptube;
 import net.kuehldesign.backuptube.site.youtube.YouTubeVideo;
 import net.kuehldesign.backuptube.site.youtube.YouTubeVideoGroup;
 import com.google.gson.Gson;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -15,7 +13,6 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.MalformedFeedURLException;
-import net.kuehldesign.backuptube.exception.UnableToGetSourceException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 
 public class BackupHelper {
@@ -54,28 +51,6 @@ public class BackupHelper {
         }
         
         return content;
-    }
-
-    public static String getSource(String url) throws UnableToGetSourceException {
-        try {
-            URL u = new URL(url);
-            URLConnection connection = u.openConnection();
-            InputStream input = connection.getInputStream();
-
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            byte buffer[] = new byte[1024];
-            int bytesRead;
-
-            while ((bytesRead = input.read(buffer)) != -1) {
-                output.write(buffer, 0, bytesRead);
-            }
-
-            return output.toString();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            System.err.println(ex.getMessage());
-            throw new UnableToGetSourceException("");
-        }
     }
 
     String user;
