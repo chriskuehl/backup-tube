@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.MalformedFeedURLException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
+import net.kuehldesign.backuptube.video.DownloadableVideo;
 
 public class BackupHelper {
     
@@ -92,47 +93,54 @@ public class BackupHelper {
         }
     }
 
-    public LinkedList<YouTubeVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
-        LinkedList<YouTubeVideo> videos = new LinkedList();
-        int total = (- 1);
-        int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
-        int i = 0;
+    public String getSiteID() {
+        return siteID;
+    }
 
-        while (true) {
-            URL url;
+    public LinkedList<DownloadableVideo> getVideos() throws FatalBackupException, UnableToOpenURLConnectionException {
+        LinkedList<DownloadableVideo> videos = new LinkedList();
 
-            try {
-                url = getFeedURL(startIndex);
-            } catch (MalformedFeedURLException ex) {
-                throw new FatalBackupException("Unable to get feed URL");
-            }
+        if (getSiteID() == SITE_YOUTUBE) {
+            int total = (- 1);
+            int startIndex = 1; // YouTube is dumb and starts at 1 instead of 0...
+            int i = 0;
 
-            URLConnection connection;
+            while (true) {
+                URL url;
 
-            YouTubeVideoGroup videoGroup;
-
-            try {
-                connection = url.openConnection();
-                videoGroup = new Gson().fromJson(new InputStreamReader(connection.getInputStream()), YouTubeVideoGroup.class);
-            } catch (IOException ex) {
-                throw new UnableToOpenURLConnectionException("Unable to open URL connection; does YouTube video exist?");
-            }
-
-            LinkedList<YouTubeVideo> feedVideos = videoGroup.getVideos();
-
-            if (feedVideos != null) {
-                total = feedVideos.size();
-
-                for (YouTubeVideo video : feedVideos) {
-                    videos.add(video);
+                try {
+                    url = getFeedURL(startIndex);
+                } catch (MalformedFeedURLException ex) {
+                    throw new FatalBackupException("Unable to get feed URL");
                 }
 
-                startIndex += total;
-            } else {
-                break;
+                URLConnection connection;
+
+                YouTubeVideoGroup videoGroup;
+
+                try {
+                    connection = url.openConnection();
+                    videoGroup = new Gson().fromJson(new InputStreamReader(connection.getInputStream()), YouTubeVideoGroup.class);
+                } catch (IOException ex) {
+                    throw new UnableToOpenURLConnectionException("Unable to open URL connection; does YouTube video exist?");
+                }
+
+                LinkedList<YouTubeVideo> feedVideos = videoGroup.getVideos();
+
+                if (feedVideos != null) {
+                    total = feedVideos.size();
+
+                    for (YouTubeVideo video : feedVideos) {
+                        videos.add(video);
+                    }
+
+                    startIndex += total;
+                } else {
+                    break;
+                }
             }
+
+            return videos;
         }
-        
-        return videos;
     }
 }
