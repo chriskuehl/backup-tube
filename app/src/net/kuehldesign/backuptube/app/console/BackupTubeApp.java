@@ -13,9 +13,12 @@ import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.datafile.BackupTubeDataFile;
+import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
 import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
@@ -64,6 +67,25 @@ public class BackupTubeApp {
     private static void sendMessageIfBadSaveDir(boolean success) {
         if (! success) {
             System.err.println(badSaveDirMessage);
+        }
+    }
+
+    private static BackupTubeDataFile getDataFile(File dataFeedFile) throws NullPointerException {
+        try {
+            return new Gson().fromJson(new BufferedReader(new FileReader(dataFeedFile)), BackupTubeDataFile.class);
+        } catch (FileNotFoundException ex) {
+            return null;
+        }
+    }
+
+    public static void saveDataFile(File dataFeedFile, BackupTubeDataFile dataFile) {
+        JsonWriter writer;
+        try {
+            writer = new JsonWriter(new FileWriter(dataFeedFile));
+            new Gson().toJson(dataFile, BackupTubeDataFile.class, writer);
+        } catch (IOException ex) {
+            System.err.println("Fatal error: Unable to write the main data file");
+            System.exit(0);
         }
     }
 
@@ -156,19 +178,17 @@ public class BackupTubeApp {
 
         // check if there's already a data feed; if so, load from it
         File dataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_DATAFILE);
+        try {
+            BackupTubeDataFile prevDataFile = getDataFile(dataFeedFile);
 
-        if (dataFeedFile.exists()) {
-            try {
-                BackupTubeDataFile dataFeed = new Gson().fromJson(new BufferedReader(new FileReader(dataFeedFile)), BackupTubeDataFile.class);
-                
-                for (YouTubeVideo video : dataFeed.getVideos()) {
-                    /* if (video.hasBeenDeleted()) {
-                        // has been deleted
-                    } */
+            for (StoredVideo video : prevDataFile.getVideos()) {
+                if (video.hasBeenDeleted()) {
+                    // has been deleted
+                    System.out.println("Found deleted video: " + video.getFolderName());
                 }
-            } catch (FileNotFoundException ex) {
-                // data feed doesn't actually exist; this shouldn't happen (checked above)
             }
+        } catch (NullPointerException ex) {
+            // data file doesn't exist yet
         }
 
         BackupHelper helper = new BackupHelper();
@@ -184,25 +204,6 @@ public class BackupTubeApp {
         } catch (UnableToOpenURLConnectionException ex) {
             System.err.println("Unable to open URL connection; does YouTube account exist?");
             ex.printStackTrace();
-        }
-
-        // before downloading, save the
-        // TODO: update this each time after downloading
-        BackupTubeDataFile newDataFile = new BackupTubeDataFile();
-        newDataFile.setLastUpdated(BackupTubeCommon.getCurrentTime());
-        newDataFile.setVideos(videos);
-
-        if (dataFeedFile.exists()) { // if there is an old file,
-            dataFeedFile.delete(); // try to delete it
-        }
-
-        JsonWriter writer;
-        try {
-            writer = new JsonWriter(new FileWriter(dataFeedFile));
-            new Gson().toJson(newDataFile, BackupTubeDataFile.class, writer);
-        } catch (IOException ex) {
-            System.err.println("Fatal error: Unable to write the main data file");
-            System.exit(0);
         }
 
         // now, start downloading the videos
@@ -260,6 +261,17 @@ public class BackupTubeApp {
                         }
 
                         System.out.println("Successfully downloaded video \"" + video.getTitle() + "\"");
+                        
+                        // now update the JSON file since the file has been downloaded
+                        
+                        // get the current data object
+                        BackupTubeDataFile dataFile = getDataFile();
+
+                        // delete the data file if it exists
+                        if (dataFeedFile.exists()) { // if there is an old file,
+                            dataFeedFile.delete(); // try to delete it
+                        }
+
                         break;
                     } catch (BadVideoException ex) {
                         ex.printStackTrace();
