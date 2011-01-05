@@ -87,7 +87,6 @@ public class BackupTubeApp {
             PrintWriter writer = new PrintWriter(dataFeedFile);
             writer.write(json);
             writer.close();
-            System.exit(0);
         } catch (IOException ex) {
             System.err.println("Fatal error: Unable to write the main data file");
             System.exit(0);
