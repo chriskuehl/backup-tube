@@ -74,12 +74,8 @@ public class BackupTubeApp {
         }
     }
 
-    private static BackupTubeDataFile getDataFile(File dataFeedFile) throws NullPointerException {
-        try {
-            return new Gson().fromJson(new BufferedReader(new FileReader(dataFeedFile)), BackupTubeDataFile.class);
-        } catch (FileNotFoundException ex) {
-            return null;
-        }
+    private static BackupTubeDataFile getDataFile(File dataFeedFile) throws NullPointerException, FileNotFoundException {
+        return new Gson().fromJson(new BufferedReader(new FileReader(dataFeedFile)), BackupTubeDataFile.class);
     }
 
     public static void saveDataFile(File dataFeedFile, BackupTubeDataFile dataFile) {
@@ -212,7 +208,7 @@ public class BackupTubeApp {
                     System.out.println("Found deleted video: " + video.getFolderName());
                 }
             }
-        } catch (NullPointerException ex) {
+        } catch (FileNotFoundException ex) {
             // data file doesn't exist yet
         }
 
@@ -310,13 +306,20 @@ public class BackupTubeApp {
 
                         try {
                             dataFile = getDataFile(dataFeedFile);
-                        } catch (NullPointerException ex) {
+                        } catch (FileNotFoundException ex) {
                             dataFile = new BackupTubeDataFile();
-                            dataFile.setVideos(new LinkedList<StoredVideo>());
                         }
 
-                        LinkedList<StoredVideo> storedVideos = dataFile.getVideos();
+                        LinkedList<StoredVideo> storedVideos = null;
+
+                        try {
+                            storedVideos = dataFile.getVideos();
+                        } catch (NullPointerException ex) {
+                            storedVideos = new LinkedList();
+                        }
+
                         storedVideos.add(storedVideo);
+                        dataFile.setVideos(storedVideos);
                         
                         saveDataFile(dataFeedFile, dataFile);
                         break;
