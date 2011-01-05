@@ -1,5 +1,7 @@
 package net.kuehldesign.backuptube.app.common;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.File;
 import java.util.Date;
 
@@ -10,6 +12,10 @@ public class BackupTubeCommon {
     public static final String LOCATION_VIDEO = ""; // video file, relative to video's folder, if using another dir REQUIRES a trailing slash
     public static final String LOCATION_VIDEO_DATAFILE = "video.json"; // data for each video, relative to the video's folder
     public static final String LOCATION_DATAFILE = "data.json"; // data in the root directory with info on all videos
+
+    public static Gson getPrettyGson() {
+        return new GsonBuilder().setPrettyPrinting().create();
+    }
 
     public static String escapeFileName(String fileName) {
         String newFileName = "";
