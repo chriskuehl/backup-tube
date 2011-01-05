@@ -5,16 +5,6 @@ import net.kuehldesign.jnetutils.JNetUtils;
 import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
 
 public class StoredYouTubeVideo extends StoredVideo {
-    private String videoID;
-
-    public void setVideoID(String videoID) {
-        this.videoID = videoID;
-    }
-
-    public String getVideoID() {
-        return videoID;
-    }
-
     @Override
     public boolean hasBeenDeleted() {
         String source = null;
