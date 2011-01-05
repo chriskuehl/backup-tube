@@ -296,8 +296,13 @@ public class BackupTubeApp {
                         // now update the JSON file since the file has been downloaded
 
                         // created the StoredVideo object
-                        // TODO: add a better way to deal with type (e.g. YouTube vs another site)
-                        StoredYouTubeVideo storedVideo = new StoredYouTubeVideo();
+                        StoredVideo storedVideo;
+
+                        if (video.getSiteID().equals(BackupHelper.SITE_YOUTUBE)) {
+                            storedVideo = new StoredYouTubeVideo();
+                        } else {
+                            storedVideo = new StoredVideo();
+                        }
 
                         storedVideo.setTitle(video.getTitle());
                         storedVideo.setDownloadedTime(BackupTubeCommon.getCurrentTime());
