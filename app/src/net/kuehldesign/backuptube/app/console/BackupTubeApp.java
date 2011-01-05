@@ -83,7 +83,7 @@ public class BackupTubeApp {
         }
 
         try {
-            String json = new Gson().toJson(dataFile, BackupTubeDataFile.class);
+            String json = BackupTubeCommon.getPrettyGson().toJson(dataFile, BackupTubeDataFile.class);
             PrintWriter writer = new PrintWriter(dataFeedFile);
             writer.write(json);
             writer.close();
@@ -314,7 +314,7 @@ public class BackupTubeApp {
                             dataFile = new BackupTubeDataFile();
                         }
 
-                        LinkedList<StoredVideo> storedVideos = null;
+                        LinkedList<StoredVideo> storedVideos = dataFile.getVideos();
 
                         if (storedVideos == null) {
                             storedVideos = new LinkedList();
