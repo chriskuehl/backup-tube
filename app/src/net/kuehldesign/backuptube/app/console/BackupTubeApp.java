@@ -239,9 +239,9 @@ public class BackupTubeApp {
             int totalVideoCount = videos.size();
 
             for (DownloadableVideo video : videos) {
-                for (int downloadTry = 0; downloadTry < 3; downloadTry ++) {
-                    //System.out.println("Starting try " + (downloadTry + 1) + "/3 to download \"" + video.getTitle() + "\"");
+                // TODO: check if it exists, if so, skip
 
+                for (int downloadTry = 0; downloadTry < 3; downloadTry ++) {
                     try {
                         video.init();
                         String downloadURL = video.getDownloadURL();
@@ -250,9 +250,18 @@ public class BackupTubeApp {
                         SimpleDateFormat published = new SimpleDateFormat("yyyy_MM_dd");
                         Date date = new Date(video.getPublished());
                         String videoFolder = published.format(date) + " " + safeVideoTitle;
+                        String videoSaveLocation = saveDir + videoFolder + "/" + safeVideoTitle + "." + video.getExtension();
+
+                        File videoFile = new File(videoSaveLocation);
+
+                        // it was created in a previous try and needs to
+                        // be deleted so it can be downloaded again
+                        if (videoFile.exists()) {
+                            videoFile.delete();
+                        }
 
                         try {
-                            d = new FileDownloader(new URL(downloadURL), saveDir + videoFolder + "/" + safeVideoTitle + "." + video.getExtension());
+                            d = new FileDownloader(new URL(downloadURL), videoSaveLocation);
                         } catch (FileAlreadyExistsException ex) {
                             System.err.println("Unable to download video \"" + video.getTitle() + "\"; file already exists");
                             break;
