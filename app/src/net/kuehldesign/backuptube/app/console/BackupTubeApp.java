@@ -1,15 +1,14 @@
 package net.kuehldesign.backuptube.app.console;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonWriter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -83,10 +82,12 @@ public class BackupTubeApp {
             dataFeedFile.delete();
         }
 
-        JsonWriter writer;
         try {
-            writer = new JsonWriter(new FileWriter(dataFeedFile));
-            new Gson().toJson(dataFile, BackupTubeDataFile.class, writer);
+            String json = new Gson().toJson(dataFile, BackupTubeDataFile.class);
+            PrintWriter writer = new PrintWriter(dataFeedFile);
+            writer.write(json);
+            writer.close();
+            System.exit(0);
         } catch (IOException ex) {
             System.err.println("Fatal error: Unable to write the main data file");
             System.exit(0);
