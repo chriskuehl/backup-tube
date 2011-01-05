@@ -79,6 +79,10 @@ public class BackupTubeApp {
     }
 
     public static void saveDataFile(File dataFeedFile, BackupTubeDataFile dataFile) {
+        if (dataFeedFile.exists()) {
+            dataFeedFile.delete();
+        }
+
         JsonWriter writer;
         try {
             writer = new JsonWriter(new FileWriter(dataFeedFile));
@@ -312,13 +316,13 @@ public class BackupTubeApp {
 
                         LinkedList<StoredVideo> storedVideos = null;
 
-                        try {
-                            storedVideos = dataFile.getVideos();
-                        } catch (NullPointerException ex) {
+                        if (storedVideos == null) {
                             storedVideos = new LinkedList();
                         }
 
                         storedVideos.add(storedVideo);
+                        
+                        dataFile.setLastUpdated(BackupTubeCommon.getCurrentTime());
                         dataFile.setVideos(storedVideos);
                         
                         saveDataFile(dataFeedFile, dataFile);
