@@ -77,18 +77,18 @@ public class BackupTubeApp {
         return new Gson().fromJson(new BufferedReader(new FileReader(dataFeedFile)), BackupTubeDataFile.class);
     }
 
-    public static void saveDataFile(File dataFeedFile, BackupTubeDataFile dataFile) {
+    public static void saveDataFile(File dataFeedFile, Object dataFile) {
         if (dataFeedFile.exists()) {
             dataFeedFile.delete();
         }
 
         try {
-            String json = BackupTubeCommon.getPrettyGson().toJson(dataFile, BackupTubeDataFile.class);
+            String json = BackupTubeCommon.getPrettyGson().toJson(dataFile, dataFile.getClass());
             PrintWriter writer = new PrintWriter(dataFeedFile);
             writer.write(json);
             writer.close();
         } catch (IOException ex) {
-            System.err.println("Fatal error: Unable to write the main data file");
+            System.err.println("Fatal error: Unable to write the data file");
             System.exit(0);
         }
     }
@@ -302,7 +302,16 @@ public class BackupTubeApp {
 
                         System.out.println("Successfully downloaded video \"" + video.getTitle() + "\"");
 
-                        // now update the JSON file since the file has been downloaded
+                        // create the main JSON file
+                        File singleVideoDataFeedFile = new File(saveDir + videoFolder + "/" + BackupTubeCommon.LOCATION_VIDEO_DATAFILE);
+
+                        if (singleVideoDataFeedFile.exists()) {
+                            singleVideoDataFeedFile.delete();
+                        }
+
+                        saveDataFile(singleVideoDataFeedFile, video);
+
+                        // now update the main JSON file since the file has been downloaded
 
                         // created the StoredVideo object
                         StoredVideo storedVideo;
