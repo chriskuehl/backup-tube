@@ -17,8 +17,8 @@ import java.util.LinkedList;
 import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.datafile.BackupTubeDataFile;
-import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
-import net.kuehldesign.backuptube.app.common.stored.youtube.StoredYouTubeVideo;
+import net.kuehldesign.backuptube.app.common.stored.ListedVideo;
+import net.kuehldesign.backuptube.app.common.stored.youtube.ListedYouTubeVideo;
 import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
@@ -206,7 +206,7 @@ public class BackupTubeApp {
         try {
             BackupTubeDataFile prevDataFile = getDataFile(dataFeedFile);
 
-            for (StoredVideo video : prevDataFile.getVideos()) {
+            for (ListedVideo video : prevDataFile.getVideos()) {
                 if (video.hasBeenDeleted()) {
                     // has been deleted
                     System.out.println("Found deleted video: " + video.getFolderName());
@@ -314,12 +314,12 @@ public class BackupTubeApp {
                         // now update the main JSON file since the file has been downloaded
 
                         // created the StoredVideo object
-                        StoredVideo storedVideo;
+                        ListedVideo storedVideo;
 
                         if (video.getSiteID().equals(BackupHelper.SITE_YOUTUBE)) {
-                            storedVideo = new StoredYouTubeVideo();
+                            storedVideo = new ListedYouTubeVideo();
                         } else {
-                            storedVideo = new StoredVideo();
+                            storedVideo = new ListedVideo();
                         }
 
                         storedVideo.setTitle(video.getTitle());
@@ -337,7 +337,7 @@ public class BackupTubeApp {
                             dataFile = new BackupTubeDataFile();
                         }
 
-                        LinkedList<StoredVideo> storedVideos = dataFile.getVideos();
+                        LinkedList<ListedVideo> storedVideos = dataFile.getVideos();
 
                         if (storedVideos == null) {
                             storedVideos = new LinkedList();
