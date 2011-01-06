@@ -1,6 +1,6 @@
 package net.kuehldesign.backuptube.app.common.stored;
 
-public class StoredVideo {
+public class ListedVideo {
     private String folderName;
     private long downloadedTime;
     private String title;

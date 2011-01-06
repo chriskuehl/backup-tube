@@ -1,10 +1,10 @@
 package net.kuehldesign.backuptube.app.common.stored.youtube;
 
-import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
+import net.kuehldesign.backuptube.app.common.stored.ListedVideo;
 import net.kuehldesign.jnetutils.JNetUtils;
 import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
 
-public class StoredYouTubeVideo extends StoredVideo {
+public class ListedYouTubeVideo extends ListedVideo {
     @Override
     public boolean hasBeenDeleted() {
         String source = null;
