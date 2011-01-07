@@ -19,6 +19,9 @@ import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.datafile.BackupTubeDataFile;
 import net.kuehldesign.backuptube.app.common.listed.ListedVideo;
 import net.kuehldesign.backuptube.app.common.listed.site.youtube.ListedYouTubeVideo;
+import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
+import net.kuehldesign.backuptube.app.common.stored.StoredVideoSiteInfo;
+import net.kuehldesign.backuptube.app.common.stored.site.youtube.StoredYouTubeVideo;
 import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
@@ -302,31 +305,55 @@ public class BackupTubeApp {
 
                         System.out.println("Successfully downloaded video \"" + video.getTitle() + "\"");
 
-                        // create the main JSON file
+                        // create the video JSON file
                         File singleVideoDataFeedFile = new File(saveDir + videoFolder + "/" + BackupTubeCommon.LOCATION_VIDEO_DATAFILE);
 
                         if (singleVideoDataFeedFile.exists()) {
                             singleVideoDataFeedFile.delete();
                         }
 
+                        StoredVideo storedVideo;
+                        StoredVideoSiteInfo siteInfo = new StoredVideoSiteInfo();
+
+                        siteInfo.setSiteID(video.getSiteID());
+                        siteInfo.setVideoID(video.getVideoID());
+
+                        if (video.getSiteID().equals(BackupHelper.SITE_YOUTUBE)) {
+                            storedVideo = new StoredYouTubeVideo();
+
+                            storedVideo.setCategory(video.getCategory());
+                            storedVideo.setTags(video.getTags());
+                            storedVideo.setVideoResponse(videoResponse);
+                        } else {
+                            storedVideo = new StoredVideo();
+                        }
+
+                        storedVideo.setDescription(video.getDescription());
+                        storedVideo.setDownloadedOn(BackupTubeCommon.getTimeString(BackupTubeCommon.getCurrentTime()));
+                        storedVideo.setHasBeenDeleted(false);
+                        storedVideo.setPublishedOn(BackupTubeCommon.getTimeString(video.getPublished()));
+                        storedVideo.setSiteInfo(siteInfo);
+                        storedVideo.setTitle(video.getTitle());
+                        storedVideo.setUploader(video.getUploader());
+
                         saveDataFile(singleVideoDataFeedFile, video);
 
                         // now update the main JSON file since the file has been downloaded
 
-                        // created the StoredVideo object
-                        ListedVideo storedVideo;
+                        // created the ListedVideo object
+                        ListedVideo listedVideo;
 
                         if (video.getSiteID().equals(BackupHelper.SITE_YOUTUBE)) {
-                            storedVideo = new ListedYouTubeVideo();
+                            listedVideo = new ListedYouTubeVideo();
                         } else {
-                            storedVideo = new ListedVideo();
+                            listedVideo = new ListedVideo();
                         }
 
-                        storedVideo.setTitle(video.getTitle());
-                        storedVideo.setDownloadedTime(BackupTubeCommon.getCurrentTime());
-                        storedVideo.setFolderName(videoFolder);
-                        storedVideo.setSiteID(video.getSiteID());
-                        storedVideo.setVideoID(video.getVideoID());
+                        listedVideo.setTitle(video.getTitle());
+                        listedVideo.setDownloadedTime(BackupTubeCommon.getCurrentTime());
+                        listedVideo.setFolderName(videoFolder);
+                        listedVideo.setSiteID(video.getSiteID());
+                        listedVideo.setVideoID(video.getVideoID());
 
                         // get the current data object
                         BackupTubeDataFile dataFile;
@@ -343,7 +370,7 @@ public class BackupTubeApp {
                             storedVideos = new LinkedList();
                         }
 
-                        storedVideos.add(storedVideo);
+                        storedVideos.add(listedVideo);
                         
                         dataFile.setLastUpdated(BackupTubeCommon.getCurrentTime());
                         dataFile.setVideos(storedVideos);
