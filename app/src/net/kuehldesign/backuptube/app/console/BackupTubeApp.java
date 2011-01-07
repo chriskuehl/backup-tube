@@ -26,6 +26,7 @@ import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleE
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
+import net.kuehldesign.backuptube.site.youtube.video.YouTubeVideo;
 import net.kuehldesign.backuptube.video.DownloadableVideo;
 import net.kuehldesign.jnetutils.FileDownloader;
 import net.kuehldesign.jnetutils.exception.FileAlreadyExistsException;
@@ -320,10 +321,13 @@ public class BackupTubeApp {
 
                         if (video.getSiteID().equals(BackupHelper.SITE_YOUTUBE)) {
                             storedVideo = new StoredYouTubeVideo();
+                            
+                            YouTubeVideo siteVideo = (YouTubeVideo) video;
+                            StoredYouTubeVideo storedSiteVideo = (StoredYouTubeVideo) storedVideo;
 
-                            storedVideo.setCategory(video.getCategory());
-                            storedVideo.setTags(video.getTags());
-                            storedVideo.setVideoResponse(videoResponse);
+                            storedSiteVideo.setCategory(siteVideo.getCategory());
+                            storedSiteVideo.setTags(siteVideo.getTags());
+                           // storedVideo.setVideoResponse(siteVideo.getVideoResponse());
                         } else {
                             storedVideo = new StoredVideo();
                         }
@@ -335,8 +339,9 @@ public class BackupTubeApp {
                         storedVideo.setSiteInfo(siteInfo);
                         storedVideo.setTitle(video.getTitle());
                         storedVideo.setUploader(video.getUploader());
+                        storedVideo.setUrl(video.getURL());
 
-                        saveDataFile(singleVideoDataFeedFile, video);
+                        saveDataFile(singleVideoDataFeedFile, storedVideo);
 
                         // now update the main JSON file since the file has been downloaded
 
