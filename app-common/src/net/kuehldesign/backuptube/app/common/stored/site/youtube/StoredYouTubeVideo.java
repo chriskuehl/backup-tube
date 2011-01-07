@@ -1,7 +1,7 @@
 package net.kuehldesign.backuptube.app.common.stored.site.youtube;
 
 import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
-import net.kuehldesign.backuptube.app.common.stored.StoredVideoResponseInfo;
+import net.kuehldesign.backuptube.stored.StoredVideoResponseInfo;
 
 public class StoredYouTubeVideo extends StoredVideo {
     private String category;
