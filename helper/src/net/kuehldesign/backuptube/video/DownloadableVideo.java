@@ -12,5 +12,6 @@ public interface DownloadableVideo {
     public String getDownloadURL();
     public String getExtension();
     public String getVideoID();
+    public String getUploader();
     public void init() throws FatalBackupException, BadVideoException;
 }

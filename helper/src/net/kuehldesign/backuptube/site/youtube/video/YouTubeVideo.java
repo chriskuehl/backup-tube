@@ -17,6 +17,8 @@ public class YouTubeVideo implements DownloadableVideo {
     private YouTubeVideoDescription content;
     private YouTubeVideoDate published;
     private LinkedList<YouTubeVideoLink> link;
+    private LinkedList<YouTubeVideoAuthor> author;
+    private LinkedList<YouTubeVideoCategory> category;
     private boolean hasError = false;
 
     private int cacheFormatValue = 0;
@@ -27,6 +29,14 @@ public class YouTubeVideo implements DownloadableVideo {
         return title.getTitle();
     }
 
+    public String getCategory() { // as far as I can tell category is always index #1
+        return category.get(1).getLabel();
+    }
+
+    public String getUploader() {
+        return author.get(0).getAuthor();
+    }
+
     public String getDescription() {
         return content.getDescription();
     }
@@ -35,7 +45,7 @@ public class YouTubeVideo implements DownloadableVideo {
         return published.getDate();
     }
 
-    public String getURL() { // TODO: simplify this
+    public String getURL() {
         return link.get(0).getURL();
     }
 
