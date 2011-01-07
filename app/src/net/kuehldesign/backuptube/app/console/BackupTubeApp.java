@@ -21,6 +21,7 @@ import net.kuehldesign.backuptube.app.common.listed.ListedVideo;
 import net.kuehldesign.backuptube.app.common.listed.site.youtube.ListedYouTubeVideo;
 import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
 import net.kuehldesign.backuptube.app.common.stored.StoredVideoSiteInfo;
+import net.kuehldesign.backuptube.app.common.stored.site.youtube.StoredYouTubeResponseInfo;
 import net.kuehldesign.backuptube.app.common.stored.site.youtube.StoredYouTubeVideo;
 import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
@@ -327,7 +328,18 @@ public class BackupTubeApp {
 
                             storedSiteVideo.setCategory(siteVideo.getCategory());
                             storedSiteVideo.setTags(siteVideo.getTags());
-                            storedSiteVideo.setVideoResponse(siteVideo.getResponseInfo());
+
+                            // video response
+                            YouTubeVideo responseVideo = siteVideo.getResponseVideo();
+
+                            if (responseVideo != null) {
+                                StoredYouTubeResponseInfo responseInfo = new StoredYouTubeResponseInfo();
+                                responseInfo.setTitle(responseVideo.getTitle());
+                                responseInfo.setUrl(responseVideo.getURL());
+                                responseInfo.setUser(responseVideo.getUploader());
+                                
+                                storedSiteVideo.setVideoResponse(responseInfo);
+                            }
                         } else {
                             storedVideo = new StoredVideo();
                         }
