@@ -29,6 +29,20 @@ public class YouTubeVideo implements DownloadableVideo {
         return title.getTitle();
     }
 
+    public String getTags() {
+        String tags = "";
+
+        for (int i = 2; i < category.size(); i ++) {
+            tags += category.get(i).getTerm() + " ";
+        }
+
+        if (tags.length() > 1) {
+            tags = tags.substring(0, tags.length() - 1);
+        }
+
+        return tags;
+    }
+
     public String getCategory() { // as far as I can tell category is always index #1
         return category.get(1).getLabel();
     }
