@@ -6,19 +6,8 @@ public class StoredVideo {
     private String downloadedOn;
     private String title;
     private StoredVideoSiteInfo siteInfo;
-    private String category;
-    private StoredVideoResponseInfo videoResponse;
-    private String tags;
     private String uploader;
     private boolean hasBeenDeleted;
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
     public String getDescription() {
         return description;
@@ -60,14 +49,6 @@ public class StoredVideo {
         this.siteInfo = siteInfo;
     }
 
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -82,14 +63,6 @@ public class StoredVideo {
 
     public void setUploader(String uploader) {
         this.uploader = uploader;
-    }
-
-    public StoredVideoResponseInfo getVideoResponse() {
-        return videoResponse;
-    }
-
-    public void setVideoResponse(StoredVideoResponseInfo videoResponse) {
-        this.videoResponse = videoResponse;
     }
 
     public StoredVideo() {

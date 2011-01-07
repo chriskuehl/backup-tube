@@ -3,6 +3,7 @@ package net.kuehldesign.backuptube.app.common;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BackupTubeCommon {
@@ -61,5 +62,10 @@ public class BackupTubeCommon {
 
     public static long getCurrentTime() {
         return new Date().getTime();
+    }
+
+    public String getTimeString(long timeToFormat) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        return sdf.format(new Date(timeToFormat));
     }
 }
