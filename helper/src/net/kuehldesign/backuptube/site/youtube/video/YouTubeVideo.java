@@ -1,6 +1,10 @@
 package net.kuehldesign.backuptube.site.youtube.video;
 
+import com.google.gson.Gson;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.LinkedList;
@@ -33,17 +37,24 @@ public class YouTubeVideo implements DownloadableVideo {
     }
 
     public StoredVideoResponseInfo getResponseInfo() {
-        if (source.indexOf("This video is a response to <a href=\"") <= (- 1)) {
+        System.err.println(source.length());
+        if (source.indexOf("This video is a response to <a href=\"") <= (- 1))  {
+            System.err.println("dont exist");
             return null;
         }
-
+        System.err.println("exist");
         StoredVideoResponseInfo info = new StoredVideoResponseInfo();
 
-        String videoURL = "http://youtube.com" + BackupHelper.between(source, "This video is a response to <a href=\"", "&amp;");
-        YouTubeVideo video = new YouTubeVideo();
-        video.setURL(videoURL);
+        try { // TODO: clean this up, it's a mess!
+            String vid = BackupHelper.between(source, "This video is a response to <a href=\"/watch?v=", "&amp;");
+            System.err.println("vid: " + vid);
+            String videoURL = "http://gdata.youtube.com/feeds/api/videos/" + URLEncoder.encode(vid, "UTF-8") + "?v=2&alt=json";
 
-        try {
+            URLConnection connection = new URL(videoURL).openConnection();
+            YouTubeVideoWithEntry videoEntry = new Gson().fromJson(new InputStreamReader(connection.getInputStream()), YouTubeVideoWithEntry.class);
+            YouTubeVideo video = videoEntry.getVideo();
+            //video.setURL(videoURL);
+
             video.init();
 
             info.setTitle(video.getTitle());
@@ -52,6 +63,7 @@ public class YouTubeVideo implements DownloadableVideo {
 
             return info;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
