@@ -12,7 +12,6 @@ import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.site.youtube.YouTubeHelper;
-import net.kuehldesign.backuptube.stored.StoredVideoResponseInfo;
 import net.kuehldesign.backuptube.video.DownloadableVideo;
 import net.kuehldesign.jnetutils.JNetUtils;
 import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
@@ -32,40 +31,38 @@ public class YouTubeVideo implements DownloadableVideo {
     private String cacheURL;
     private String cacheToken;
 
+    private YouTubeVideo responseVideo;
+    private boolean hasFoundResponseInfo = false;
+
     public String getTitle() {
         return title.getTitle();
     }
 
-    public StoredVideoResponseInfo getResponseInfo() {
-        System.err.println(source.length());
-        if (source.indexOf("This video is a response to <a href=\"") <= (- 1))  {
-            System.err.println("dont exist");
-            return null;
+    private void findResponseInfo() {
+        if (! hasFoundResponseInfo() && source.indexOf("This video is a response to <a href=\"") > (- 1))  {
+            try {
+                String vid = BackupHelper.between(source, "This video is a response to <a href=\"/watch?v=", "&amp;");
+                System.err.println("vid: " + vid);
+                URL videoURL = new URL("http://gdata.youtube.com/feeds/api/videos/" + URLEncoder.encode(vid, "UTF-8") + "?v=2&alt=json");
+
+                URLConnection connection = videoURL.openConnection();
+                YouTubeVideoWithEntry videoEntry = new Gson().fromJson(new InputStreamReader(connection.getInputStream()), YouTubeVideoWithEntry.class);
+                responseVideo = videoEntry.getVideo();
+                responseVideo.init();
+            } catch (Exception ex) {
+
+            }
         }
-        System.err.println("exist");
-        StoredVideoResponseInfo info = new StoredVideoResponseInfo();
 
-        try { // TODO: clean this up, it's a mess!
-            String vid = BackupHelper.between(source, "This video is a response to <a href=\"/watch?v=", "&amp;");
-            System.err.println("vid: " + vid);
-            String videoURL = "http://gdata.youtube.com/feeds/api/videos/" + URLEncoder.encode(vid, "UTF-8") + "?v=2&alt=json";
+        hasFoundResponseInfo = true;
+    }
 
-            URLConnection connection = new URL(videoURL).openConnection();
-            YouTubeVideoWithEntry videoEntry = new Gson().fromJson(new InputStreamReader(connection.getInputStream()), YouTubeVideoWithEntry.class);
-            YouTubeVideo video = videoEntry.getVideo();
-            //video.setURL(videoURL);
+    private boolean hasFoundResponseInfo() {
+        return hasFoundResponseInfo;
+    }
 
-            video.init();
-
-            info.setTitle(video.getTitle());
-            info.setUrl(video.getURL());
-            info.setUser(video.getUploader());
-
-            return info;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public YouTubeVideo getResponseVideo() {
+        return responseVideo;
     }
 
     public String getTags() {
