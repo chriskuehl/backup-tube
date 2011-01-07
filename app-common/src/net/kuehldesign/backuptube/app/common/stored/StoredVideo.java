@@ -36,7 +36,7 @@ public class StoredVideo {
         this.downloadedOn = downloadedOn;
     }
 
-    public boolean isHasBeenDeleted() {
+    public boolean hasBeenDeleted() {
         return hasBeenDeleted;
     }
 
