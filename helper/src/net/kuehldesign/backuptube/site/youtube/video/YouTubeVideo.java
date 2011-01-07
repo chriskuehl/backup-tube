@@ -8,6 +8,7 @@ import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
 import net.kuehldesign.backuptube.site.youtube.YouTubeHelper;
+import net.kuehldesign.backuptube.stored.StoredVideoResponseInfo;
 import net.kuehldesign.backuptube.video.DownloadableVideo;
 import net.kuehldesign.jnetutils.JNetUtils;
 import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
@@ -20,6 +21,8 @@ public class YouTubeVideo implements DownloadableVideo {
     private LinkedList<YouTubeVideoAuthor> author;
     private LinkedList<YouTubeVideoCategory> category;
     private boolean hasError = false;
+    private String source;
+    private String url;
 
     private int cacheFormatValue = 0;
     private String cacheURL;
@@ -27,6 +30,30 @@ public class YouTubeVideo implements DownloadableVideo {
 
     public String getTitle() {
         return title.getTitle();
+    }
+
+    public StoredVideoResponseInfo getResponseInfo() {
+        if (source.indexOf("This video is a response to <a href=\"") <= (- 1)) {
+            return null;
+        }
+
+        StoredVideoResponseInfo info = new StoredVideoResponseInfo();
+
+        String videoURL = "http://youtube.com" + BackupHelper.between(source, "This video is a response to <a href=\"", "&amp;");
+        YouTubeVideo video = new YouTubeVideo();
+        video.setURL(videoURL);
+
+        try {
+            video.init();
+
+            info.setTitle(video.getTitle());
+            info.setUrl(video.getURL());
+            info.setUser(video.getUploader());
+
+            return info;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String getTags() {
@@ -60,6 +87,10 @@ public class YouTubeVideo implements DownloadableVideo {
     }
 
     public String getURL() {
+        if (url != null) {
+            return url;
+        }
+
         return link.get(0).getURL();
     }
 
@@ -196,8 +227,11 @@ public class YouTubeVideo implements DownloadableVideo {
         }
     }
 
+    public void setURL(String url) {
+        this.url = url;
+    }
+
     public void init() throws FatalBackupException, BadVideoException {
-        String source;
         String source18;
 
         try {
