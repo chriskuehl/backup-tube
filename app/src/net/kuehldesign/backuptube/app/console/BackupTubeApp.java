@@ -327,7 +327,7 @@ public class BackupTubeApp {
 
                             storedSiteVideo.setCategory(siteVideo.getCategory());
                             storedSiteVideo.setTags(siteVideo.getTags());
-                           // storedVideo.setVideoResponse(siteVideo.getVideoResponse());
+                            storedSiteVideo.setVideoResponse(siteVideo.getResponseInfo());
                         } else {
                             storedVideo = new StoredVideo();
                         }
