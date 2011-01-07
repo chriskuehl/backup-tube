@@ -1,6 +1,7 @@
 package net.kuehldesign.backuptube.app.common.stored;
 
 public class StoredVideo {
+    private String url;
     private String publishedOn;
     private String description;
     private String downloadedOn;
@@ -8,6 +9,14 @@ public class StoredVideo {
     private StoredVideoSiteInfo siteInfo;
     private String uploader;
     private boolean hasBeenDeleted;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getDescription() {
         return description;
