@@ -64,7 +64,7 @@ public class BackupTubeCommon {
         return new Date().getTime();
     }
 
-    public String getTimeString(long timeToFormat) {
+    public static String getTimeString(long timeToFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         return sdf.format(new Date(timeToFormat));
     }
