@@ -1,6 +1,8 @@
 package net.kuehldesign.backuptube.app.common.stored.site.youtube;
 
-public class StoredYouTubeResponseInfo {
+import net.kuehldesign.backuptube.app.common.stored.VideoInfoModule;
+
+public class StoredYouTubeResponseInfo implements VideoInfoModule {
     private String user;
     private String title;
     private String url;
@@ -30,5 +32,9 @@ public class StoredYouTubeResponseInfo {
     }
 
     public StoredYouTubeResponseInfo() {
+    }
+
+    public String getHTML() { // TODO: add html stuff
+        return "";
     }
 }

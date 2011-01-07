@@ -1,6 +1,6 @@
 package net.kuehldesign.backuptube.app.common.stored;
 
-public class StoredVideo {
+public class StoredVideo implements VideoInfoModule {
     private String url;
     private String publishedOn;
     private String description;
@@ -76,5 +76,9 @@ public class StoredVideo {
 
     public StoredVideo() {
 
+    }
+
+    public String getHTML() {
+        return ""; // TODO: add HTML stuff
     }
 }
