@@ -244,7 +244,7 @@ public class BackupTubeApp {
             int totalVideoCount = videos.size();
 
             for (DownloadableVideo video : videos) {
-                // TODO: check if it exists, if so, skip
+                // TODO: check if it exists already in the folder, if so, skip
 
                 for (int downloadTry = 0; downloadTry < 3; downloadTry ++) {
                     try {
