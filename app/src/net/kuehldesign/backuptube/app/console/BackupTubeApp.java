@@ -208,7 +208,7 @@ public class BackupTubeApp {
         // check if there's already a data feed; if so, load from it
         File dataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_DATAFILE);
 
-        try {
+        try { // TODO: add logic for moving videos once found
             BackupTubeDataFile prevDataFile = getDataFile(dataFeedFile);
 
             for (ListedVideo video : prevDataFile.getVideos()) {
