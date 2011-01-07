@@ -1,11 +1,10 @@
 package net.kuehldesign.backuptube.app.common.stored.site.youtube;
 
 import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
-import net.kuehldesign.backuptube.stored.StoredVideoResponseInfo;
 
 public class StoredYouTubeVideo extends StoredVideo {
     private String category;
-    private StoredVideoResponseInfo videoResponse;
+    private StoredYouTubeResponseInfo videoResponse;
     private String tags;
 
     public String getCategory() {
@@ -24,11 +23,11 @@ public class StoredYouTubeVideo extends StoredVideo {
         this.tags = tags;
     }
 
-    public StoredVideoResponseInfo getVideoResponse() {
+    public StoredYouTubeResponseInfo getVideoResponse() {
         return videoResponse;
     }
 
-    public void setVideoResponse(StoredVideoResponseInfo videoResponse) {
+    public void setVideoResponse(StoredYouTubeResponseInfo videoResponse) {
         this.videoResponse = videoResponse;
     }
 }
