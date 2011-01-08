@@ -224,6 +224,14 @@ public class BackupTubeApp {
                 if (hasBeenDeleted) {
                     // has been deleted
                     System.out.println("Found deleted video: " + video.getFolderName());
+
+                    // create the folder for deleted videos
+                    File deletedVideosFolder = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS_DELETED);
+                    deletedVideosFolder.mkdirs();
+
+                    File currentLocation = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS + "/" + video.getFolderName());
+                    File newLocation = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS_DELETED + "/" + video.getFolderName());
+                    currentLocation.renameTo(newLocation);
                 } else {
                     listOfIDs.add(video.getVideoID());
                 }
