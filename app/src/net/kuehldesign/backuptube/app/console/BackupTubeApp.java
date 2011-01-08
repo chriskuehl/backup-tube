@@ -213,6 +213,8 @@ public class BackupTubeApp {
 
         try { // TODO: add logic for moving videos once found
             BackupTubeDataFile prevDataFile = getDataFile(dataFeedFile);
+            boolean hasUpdated = false;
+            LinkedList<ListedVideo> videosToDelete = new LinkedList();
 
             for (ListedVideo video : prevDataFile.getVideos()) {
                 boolean hasBeenDeleted = false;
@@ -232,9 +234,20 @@ public class BackupTubeApp {
                     File currentLocation = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS + "/" + video.getFolderName());
                     File newLocation = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS_DELETED + "/" + video.getFolderName());
                     currentLocation.renameTo(newLocation);
+
+                    videosToDelete.add(video);
                 } else {
                     listOfIDs.add(video.getVideoID());
                 }
+            }
+
+            for (ListedVideo videoToDelete : videosToDelete) {
+                hasUpdated = true;
+                prevDataFile.removeVideo(videoToDelete);
+            }
+
+            if (hasUpdated) {
+                saveDataFile(dataFeedFile, prevDataFile);
             }
         } catch (FileNotFoundException ex) {
             // data file doesn't exist yet
