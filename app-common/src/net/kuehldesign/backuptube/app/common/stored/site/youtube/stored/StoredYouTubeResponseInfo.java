@@ -1,4 +1,4 @@
-package net.kuehldesign.backuptube.app.common.stored.site.youtube;
+package net.kuehldesign.backuptube.app.common.stored.site.youtube.stored;
 
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.stored.VideoInfoModule;

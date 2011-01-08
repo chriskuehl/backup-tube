@@ -1,4 +1,4 @@
-package net.kuehldesign.backuptube.app.common.stored.site.youtube;
+package net.kuehldesign.backuptube.app.common.stored.site.youtube.stored;
 
 import java.util.LinkedList;
 import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
