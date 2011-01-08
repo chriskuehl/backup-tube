@@ -18,11 +18,11 @@ import net.kuehldesign.backuptube.BackupHelper;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.datafile.BackupTubeDataFile;
 import net.kuehldesign.backuptube.app.common.listed.ListedVideo;
-import net.kuehldesign.backuptube.app.common.listed.site.youtube.ListedYouTubeVideo;
 import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
 import net.kuehldesign.backuptube.app.common.stored.StoredVideoSiteInfo;
-import net.kuehldesign.backuptube.app.common.stored.site.youtube.StoredYouTubeResponseInfo;
-import net.kuehldesign.backuptube.app.common.stored.site.youtube.StoredYouTubeVideo;
+import net.kuehldesign.backuptube.app.common.stored.site.youtube.YouTubeAppHelper;
+import net.kuehldesign.backuptube.app.common.stored.site.youtube.stored.StoredYouTubeResponseInfo;
+import net.kuehldesign.backuptube.app.common.stored.site.youtube.stored.StoredYouTubeVideo;
 import net.kuehldesign.backuptube.app.console.exception.UnableToReadFromConsoleException;
 import net.kuehldesign.backuptube.exception.BadVideoException;
 import net.kuehldesign.backuptube.exception.FatalBackupException;
@@ -214,7 +214,13 @@ public class BackupTubeApp {
             BackupTubeDataFile prevDataFile = getDataFile(dataFeedFile);
 
             for (ListedVideo video : prevDataFile.getVideos()) {
-                if (video.hasBeenDeleted()) {
+                boolean hasBeenDeleted = false;
+
+                if (video.getSiteID().equals("youtube")) {
+                    hasBeenDeleted = YouTubeAppHelper.hasBeenDeleted(video);
+                }
+
+                if (hasBeenDeleted) {
                     // has been deleted
                     System.out.println("Found deleted video: " + video.getFolderName());
                 }
@@ -258,7 +264,7 @@ public class BackupTubeApp {
                         Date date = new Date(video.getPublished());
                         String videoFolder = published.format(date) + " " + safeVideoTitle;
                         String videoFileName = safeVideoTitle + "." + video.getExtension();
-                        String videoSaveLocation = saveDir + videoFolder + "/" + videoFileName;
+                        String videoSaveLocation = saveDir + BackupTubeCommon.LOCATION_VIDEOS + "/" + videoFolder + "/" + videoFileName;
 
                         File videoFile = new File(videoSaveLocation);
 
@@ -311,7 +317,7 @@ public class BackupTubeApp {
                         System.out.println("Successfully downloaded video \"" + video.getTitle() + "\"");
 
                         // create the video HTML file
-                        File singleVideoDataFeedFile = new File(saveDir + videoFolder + "/" + BackupTubeCommon.LOCATION_VIDEO_DATAFILE);
+                        File singleVideoDataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS + "/" + videoFolder + "/" + BackupTubeCommon.LOCATION_VIDEO_DATAFILE);
 
                         if (singleVideoDataFeedFile.exists()) {
                             singleVideoDataFeedFile.delete();
@@ -365,13 +371,7 @@ public class BackupTubeApp {
                         // now update the main JSON file since the file has been downloaded
 
                         // created the ListedVideo object
-                        ListedVideo listedVideo;
-
-                        if (video.getSiteID().equals(BackupHelper.SITE_YOUTUBE)) {
-                            listedVideo = new ListedYouTubeVideo();
-                        } else {
-                            listedVideo = new ListedVideo();
-                        }
+                        ListedVideo listedVideo = new ListedVideo();
 
                         listedVideo.setTitle(video.getTitle());
                         listedVideo.setDownloadedTime(BackupTubeCommon.getCurrentTime());
