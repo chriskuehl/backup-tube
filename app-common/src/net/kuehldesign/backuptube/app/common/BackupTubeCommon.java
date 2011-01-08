@@ -66,8 +66,8 @@ public class BackupTubeCommon {
     }
 
     public static String fixDir(String dir) {
-        if (! dir.endsWith("/")) {
-            dir += "/";
+        if (! dir.endsWith(File.separator)) {
+            dir += File.separator;
         }
 
         return dir;
