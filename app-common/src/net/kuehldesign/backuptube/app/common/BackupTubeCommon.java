@@ -44,7 +44,7 @@ public class BackupTubeCommon {
             }
         }
 
-        return newFileName;
+        return newFileName.trim();
     }
 
     public static boolean isGoodSaveDir(String saveDir) {
