@@ -27,4 +27,8 @@ public class BackupTubeDataFile {
     public long getLastUpdated() {
         return lastUpdated;
     }
+
+    public void removeVideo(ListedVideo video) {
+        videos.remove(video);
+    }
 }
