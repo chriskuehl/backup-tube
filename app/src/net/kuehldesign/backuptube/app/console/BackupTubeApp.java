@@ -340,7 +340,7 @@ public class BackupTubeApp {
                                 responseInfo.setTitle(responseVideo.getTitle());
                                 responseInfo.setUrl(responseVideo.getURL());
                                 responseInfo.setUser(responseVideo.getUploader());
-                                
+
                                 storedSiteVideo.setVideoResponse(responseInfo);
                             }
                         } else {
