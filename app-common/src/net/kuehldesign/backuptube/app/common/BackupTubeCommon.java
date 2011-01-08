@@ -14,6 +14,13 @@ public class BackupTubeCommon {
     public static final String LOCATION_VIDEO_DATAFILE = "video.html"; // data for each video, relative to the video's folder
     public static final String LOCATION_DATAFILE = "config.json"; // data in the root directory with info on all videos
 
+    public static final String TEMPLATE_TITLE = "<!-- TITLE -->";
+    public static final String TEMPLATE_VIDEO_TITLE = "<!-- VIDEO_TITLE -->";
+    public static final String TEMPLATE_VIDEO_FILE = "<!-- VIDEO_FILE -->";
+    public static final String TEMPLATE_CLIENT_TYPE = "<!-- CLIENT_TYPE -->";
+    public static final String TEMPLATE_CLIENT_VERSION = "<!-- CLIENT_VERSION -->";
+    public static final String TEMPLATE_GEN_DATE = "<!-- GEN_DATE -->";
+
     public static Gson getPrettyGson() {
         return new GsonBuilder().setPrettyPrinting().create();
     }
