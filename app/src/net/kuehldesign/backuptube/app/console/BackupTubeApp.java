@@ -310,7 +310,7 @@ public class BackupTubeApp {
 
                         System.out.println("Successfully downloaded video \"" + video.getTitle() + "\"");
 
-                        // create the video JSON file
+                        // create the video HTML file
                         File singleVideoDataFeedFile = new File(saveDir + videoFolder + "/" + BackupTubeCommon.LOCATION_VIDEO_DATAFILE);
 
                         if (singleVideoDataFeedFile.exists()) {
@@ -361,8 +361,6 @@ public class BackupTubeApp {
                         } catch (FileNotFoundException ex) {
                             ex.printStackTrace();
                         }
-
-                        // saveDataFile(singleVideoDataFeedFile, storedVideo);
 
                         // now update the main JSON file since the file has been downloaded
 
