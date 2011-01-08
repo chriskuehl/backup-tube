@@ -42,7 +42,7 @@ public class YouTubeVideo implements DownloadableVideo {
         if (! hasFoundResponseInfo() && source.indexOf("This video is a response to <a href=\"") > (- 1))  {
             try {
                 String vid = BackupHelper.between(source, "This video is a response to <a href=\"/watch?v=", "&amp;");
-                System.err.println("vid: " + vid);
+                
                 URL videoURL = new URL("http://gdata.youtube.com/feeds/api/videos/" + URLEncoder.encode(vid, "UTF-8") + "?v=2&alt=json");
 
                 URLConnection connection = videoURL.openConnection();
@@ -50,7 +50,7 @@ public class YouTubeVideo implements DownloadableVideo {
                 responseVideo = videoEntry.getVideo();
                 responseVideo.init();
             } catch (Exception ex) {
-
+                ex.printStackTrace();
             }
         }
 
@@ -62,6 +62,8 @@ public class YouTubeVideo implements DownloadableVideo {
     }
 
     public YouTubeVideo getResponseVideo() {
+        findResponseInfo();
+        
         return responseVideo;
     }
 
