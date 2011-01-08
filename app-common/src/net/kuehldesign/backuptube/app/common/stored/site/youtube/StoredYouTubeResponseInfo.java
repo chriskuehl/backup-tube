@@ -1,5 +1,6 @@
 package net.kuehldesign.backuptube.app.common.stored.site.youtube;
 
+import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 import net.kuehldesign.backuptube.app.common.stored.VideoInfoModule;
 import net.kuehldesign.backuptube.app.common.stored.VideoInfoTable;
 
@@ -13,7 +14,7 @@ public class StoredYouTubeResponseInfo extends VideoInfoTable implements VideoIn
         setInfoTableTitle("Video Response To:");
 
         // title of video responding to (links to it), user
-        addInfoTableEntry("Video Title", "<a href=\"" + getUrl() + "\">" + getTitle() + "</a>");
+        addInfoTableEntry("Video Title", "<a href=\"" + BackupTubeCommon.escapeURL(getUrl()) + "\">" + getTitle() + "</a>");
         addInfoTableEntry("Uploader", getUser());
     }
 

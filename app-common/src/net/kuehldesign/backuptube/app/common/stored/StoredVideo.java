@@ -3,9 +3,11 @@ package net.kuehldesign.backuptube.app.common.stored;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 
 public class StoredVideo extends VideoInfoTable implements VideoInfoModule {
@@ -95,7 +97,7 @@ public class StoredVideo extends VideoInfoTable implements VideoInfoModule {
         setInfoTableTitle("General Info");
 
         // url, uploader, uploaded on, downloaded on, description
-        addInfoTableEntry("Published URL", "<a href=\"" + getUrl() + "\">Video</a>");
+        addInfoTableEntry("Published URL", "<a href=\"" + BackupTubeCommon.escapeURL(getUrl()) + "\">Video</a>");
         addInfoTableEntry("Uploader", getUploader());
         addInfoTableEntry("Uploaded on", getPublishedOn());
         addInfoTableEntry("Downloaded on", getDownloadedOn());
@@ -109,12 +111,10 @@ public class StoredVideo extends VideoInfoTable implements VideoInfoModule {
         html = html.replaceAll(BackupTubeCommon.TEMPLATE_CLIENT_VERSION, clientVersion);
         html = html.replaceAll(BackupTubeCommon.TEMPLATE_GEN_DATE, BackupTubeCommon.getTimeString(BackupTubeCommon.getCurrentTime()));
         html = html.replaceAll(BackupTubeCommon.TEMPLATE_TITLE, getTitle() + " - " + getUploader());
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_FILE, videoFileName); // TODO: fix spaces, fails validation
-        
-        /*try {
-            html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_FILE, URLEncoder.encode(videoFileName, "UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-        }*/
+
+        // replace spaces with %20
+        String escapedVideoFileName = videoFileName.replaceAll(" ", "%20");
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_FILE, escapedVideoFileName);
 
         html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_TITLE, getTitle());
 

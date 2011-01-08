@@ -8,8 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BackupTubeCommon {
     // locations of various files and directories; directories should NOT have a trailing slash
@@ -104,5 +108,11 @@ public class BackupTubeCommon {
         }
 
         return html;
+    }
+
+    public static String escapeURL(String url) {
+        url = url.replaceAll("&", "&amp;");
+        
+        return url;
     }
 }
