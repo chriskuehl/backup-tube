@@ -94,6 +94,11 @@ public class BackupTubeApp {
             PrintWriter writer = new PrintWriter(dataFeedFile);
             writer.write(json);
             writer.close();
+
+            // hide the file on Windows; other OSes tend to use . prefix
+            if (System.getProperty("os.name").indexOf("Windows") > (- 1)) {
+                Runtime.getRuntime().exec("attrib +H " + dataFeedFile.getAbsolutePath());
+            }
         } catch (IOException ex) {
             System.err.println("Fatal error: Unable to write the data file");
             System.exit(0);
