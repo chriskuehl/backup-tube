@@ -209,6 +209,7 @@ public class BackupTubeApp {
 
         // check if there's already a data feed; if so, load from it
         File dataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_DATAFILE);
+        LinkedList<String> listOfIDs = new LinkedList();
 
         try { // TODO: add logic for moving videos once found
             BackupTubeDataFile prevDataFile = getDataFile(dataFeedFile);
@@ -223,6 +224,8 @@ public class BackupTubeApp {
                 if (hasBeenDeleted) {
                     // has been deleted
                     System.out.println("Found deleted video: " + video.getFolderName());
+                } else {
+                    listOfIDs.add(video.getVideoID());
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -252,7 +255,11 @@ public class BackupTubeApp {
             int totalVideoCount = videos.size();
 
             for (DownloadableVideo video : videos) {
-                // TODO: check if it exists already in the folder, if so, skip
+                // check if it already exists
+                if (listOfIDs.contains(video.getVideoID())) {
+                    System.out.println("Skipping video: " + video.getTitle() + " (already downloaded)");
+                    continue;
+                }
 
                 for (int downloadTry = 0; downloadTry < 3; downloadTry ++) {
                     try {
