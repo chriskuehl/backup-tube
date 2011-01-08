@@ -5,11 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.LinkedList;
 import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
 
-public class StoredVideo implements VideoInfoModule {
+public class StoredVideo extends VideoInfoTable implements VideoInfoModule {
     private String url;
     private String publishedOn;
     private String description;
@@ -87,8 +86,20 @@ public class StoredVideo implements VideoInfoModule {
 
     }
 
-    public String getHTML() {
-        return ""; // TODO: add HTML stuff
+    public LinkedList<VideoInfoModule> getExtraModules() {
+        return new LinkedList();
+    }
+
+    @Override
+    public void initInfoTable() {
+        setInfoTableTitle("General Info");
+
+        // url, uploader, uploaded on, downloaded on, description
+        addInfoTableEntry("Published URL", "<a href=\"" + getUrl() + "\">Video</a>");
+        addInfoTableEntry("Uploader", getUploader());
+        addInfoTableEntry("Uploaded on", getPublishedOn());
+        addInfoTableEntry("Downloaded on", getDownloadedOn());
+        addInfoTableEntry("Description", getDescription());
     }
 
     public void saveHTML(File file, String videoFileName, String clientType, String clientVersion) throws FileNotFoundException {
@@ -98,14 +109,32 @@ public class StoredVideo implements VideoInfoModule {
         html = html.replaceAll(BackupTubeCommon.TEMPLATE_CLIENT_VERSION, clientVersion);
         html = html.replaceAll(BackupTubeCommon.TEMPLATE_GEN_DATE, BackupTubeCommon.getTimeString(BackupTubeCommon.getCurrentTime()));
         html = html.replaceAll(BackupTubeCommon.TEMPLATE_TITLE, getTitle() + " - " + getUploader());
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_FILE, videoFileName); // TODO: fix spaces, fails validation
         
-        try {
+        /*try {
             html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_FILE, URLEncoder.encode(videoFileName, "UTF-8"));
         } catch (UnsupportedEncodingException ex) {
-        }
+        }*/
 
         html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_TITLE, getTitle());
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_INFO, "info here");
+
+        // generate info (details of the video, using VideoInfoModule
+        String info = "";
+        
+        LinkedList<VideoInfoModule> infoModules = new LinkedList();
+        infoModules.add(this);
+
+        for (VideoInfoModule module : getExtraModules()) {
+            infoModules.add(module);
+        }
+
+        infoModules.add(getSiteInfo());
+        
+        for (VideoInfoModule moduleToShow : infoModules) {
+            info += moduleToShow.getHTML() + "\n";
+        }
+
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_INFO, info);
 
         PrintWriter writer = new PrintWriter(file);
         writer.write(html);

@@ -1,6 +1,8 @@
 package net.kuehldesign.backuptube.app.common.stored.site.youtube;
 
+import java.util.LinkedList;
 import net.kuehldesign.backuptube.app.common.stored.StoredVideo;
+import net.kuehldesign.backuptube.app.common.stored.VideoInfoModule;
 
 public class StoredYouTubeVideo extends StoredVideo {
     private String category;
@@ -29,5 +31,16 @@ public class StoredYouTubeVideo extends StoredVideo {
 
     public void setVideoResponse(StoredYouTubeResponseInfo videoResponse) {
         this.videoResponse = videoResponse;
+    }
+
+    @Override
+    public LinkedList<VideoInfoModule> getExtraModules() {
+        LinkedList<VideoInfoModule> extraModules = new LinkedList();
+        
+        if (getVideoResponse() != null) {
+            extraModules.add(getVideoResponse());
+        }
+
+        return extraModules;
     }
 }
