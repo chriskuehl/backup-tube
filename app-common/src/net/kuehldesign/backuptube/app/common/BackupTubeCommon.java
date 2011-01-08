@@ -11,8 +11,8 @@ public class BackupTubeCommon {
     public static final String LOCATION_VIDEOS = "Videos";
     public static final String LOCATION_VIDEOS_DELETED = "Deleted Videos";
     public static final String LOCATION_VIDEO = ""; // video file, relative to video's folder, if using another dir REQUIRES a trailing slash
-    public static final String LOCATION_VIDEO_DATAFILE = "video.txt"; // data for each video, relative to the video's folder
-    public static final String LOCATION_DATAFILE = "data.txt"; // data in the root directory with info on all videos
+    public static final String LOCATION_VIDEO_DATAFILE = "video.html"; // data for each video, relative to the video's folder
+    public static final String LOCATION_DATAFILE = "config.json"; // data in the root directory with info on all videos
 
     public static Gson getPrettyGson() {
         return new GsonBuilder().setPrettyPrinting().create();
