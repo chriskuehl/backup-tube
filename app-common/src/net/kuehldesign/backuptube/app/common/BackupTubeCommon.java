@@ -33,7 +33,7 @@ public class BackupTubeCommon {
 
     public static String escapeFileName(String fileName) {
         String newFileName = "";
-        String allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIZJKLMNOPQRSTUV0234567890 ";
+        String allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0234567890 ";
 
         // make it alphanumeric for max compatibility
         for (int i = 0; i < fileName.length(); i ++) {
