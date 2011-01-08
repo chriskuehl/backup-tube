@@ -33,6 +33,8 @@ import net.kuehldesign.jnetutils.FileDownloader;
 import net.kuehldesign.jnetutils.exception.FileAlreadyExistsException;
 
 public class BackupTubeApp {
+    private static final String CLIENT_TYPE = "command-line";
+    private static final String CLIENT_VERSION = "0.1";
     private static final String badSaveDirMessage = "Unable to create directory there, please choose a different location";
 
     private static void showHelp(PrintStream out) {
@@ -255,7 +257,8 @@ public class BackupTubeApp {
                         SimpleDateFormat published = new SimpleDateFormat("yyyy_MM_dd");
                         Date date = new Date(video.getPublished());
                         String videoFolder = published.format(date) + " " + safeVideoTitle;
-                        String videoSaveLocation = saveDir + videoFolder + "/" + safeVideoTitle + "." + video.getExtension();
+                        String videoFileName = safeVideoTitle + "." + video.getExtension();
+                        String videoSaveLocation = saveDir + videoFolder + "/" + videoFileName;
 
                         File videoFile = new File(videoSaveLocation);
 
@@ -353,7 +356,13 @@ public class BackupTubeApp {
                         storedVideo.setUploader(video.getUploader());
                         storedVideo.setUrl(video.getURL());
 
-                        saveDataFile(singleVideoDataFeedFile, storedVideo);
+                        try {
+                            storedVideo.saveHTML(singleVideoDataFeedFile, videoFileName, CLIENT_TYPE, CLIENT_VERSION);
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+
+                        // saveDataFile(singleVideoDataFeedFile, storedVideo);
 
                         // now update the main JSON file since the file has been downloaded
 
