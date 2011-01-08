@@ -15,6 +15,8 @@ import net.kuehldesign.backuptube.exception.UnableToOpenURLConnectionException;
 import net.kuehldesign.backuptube.site.youtube.video.YouTubeVideo;
 import net.kuehldesign.backuptube.site.youtube.video.YouTubeVideoGroup;
 import net.kuehldesign.backuptube.video.DownloadableVideo;
+import net.kuehldesign.jnetutils.JNetUtils;
+import net.kuehldesign.jnetutils.exception.UnableToGetSourceException;
 
 public class YouTubeHelper {
     public static final int FORMAT_3GP_LOW     = 1;
