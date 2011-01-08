@@ -2,7 +2,12 @@ package net.kuehldesign.backuptube.app.common;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,12 +19,13 @@ public class BackupTubeCommon {
     public static final String LOCATION_VIDEO_DATAFILE = "video.html"; // data for each video, relative to the video's folder
     public static final String LOCATION_DATAFILE = "config.json"; // data in the root directory with info on all videos
 
-    public static final String TEMPLATE_TITLE = "<!-- TITLE -->";
-    public static final String TEMPLATE_VIDEO_TITLE = "<!-- VIDEO_TITLE -->";
-    public static final String TEMPLATE_VIDEO_FILE = "<!-- VIDEO_FILE -->";
-    public static final String TEMPLATE_CLIENT_TYPE = "<!-- CLIENT_TYPE -->";
-    public static final String TEMPLATE_CLIENT_VERSION = "<!-- CLIENT_VERSION -->";
-    public static final String TEMPLATE_GEN_DATE = "<!-- GEN_DATE -->";
+    public static final String TEMPLATE_TITLE = "<!TITLE>";
+    public static final String TEMPLATE_VIDEO_TITLE = "<!VIDEO_TITLE>";
+    public static final String TEMPLATE_VIDEO_FILE = "<!VIDEO_FILE>";
+    public static final String TEMPLATE_CLIENT_TYPE = "<!CLIENT_TYPE>";
+    public static final String TEMPLATE_CLIENT_VERSION = "<!CLIENT_VERSION>";
+    public static final String TEMPLATE_GEN_DATE = "<!GEN_DATE>";
+    public static final String TEMPLATE_INFO = "<!INFO>";
 
     public static Gson getPrettyGson() {
         return new GsonBuilder().setPrettyPrinting().create();
@@ -74,5 +80,29 @@ public class BackupTubeCommon {
     public static String getTimeString(long timeToFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         return sdf.format(new Date(timeToFormat));
+    }
+
+    public static String getHTMLTemplate() {
+        InputStream file = BackupTubeCommon.class.getResourceAsStream("stored/resource/video.html");
+
+        if (file == null) {
+            return null;
+        }
+
+        BufferedInputStream buffer = new BufferedInputStream(file);
+        BufferedReader data = new BufferedReader(new InputStreamReader(buffer));
+
+        String html = "";
+        String line;
+
+        try {
+            while ((line = data.readLine()) != null) {
+                html += line + "\n";
+            }
+        } catch (IOException ex) {
+            
+        }
+
+        return html;
     }
 }

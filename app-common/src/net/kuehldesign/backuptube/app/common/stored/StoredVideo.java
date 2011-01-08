@@ -1,5 +1,14 @@
 package net.kuehldesign.backuptube.app.common.stored;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.kuehldesign.backuptube.app.common.BackupTubeCommon;
+
 public class StoredVideo implements VideoInfoModule {
     private String url;
     private String publishedOn;
@@ -80,5 +89,26 @@ public class StoredVideo implements VideoInfoModule {
 
     public String getHTML() {
         return ""; // TODO: add HTML stuff
+    }
+
+    public void saveHTML(File file, String videoFileName, String clientType, String clientVersion) throws FileNotFoundException {
+        String html = BackupTubeCommon.getHTMLTemplate();
+
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_CLIENT_TYPE, clientType);
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_CLIENT_VERSION, clientVersion);
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_GEN_DATE, BackupTubeCommon.getTimeString(BackupTubeCommon.getCurrentTime()));
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_TITLE, getTitle() + " - " + getUploader());
+        
+        try {
+            html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_FILE, URLEncoder.encode(videoFileName, "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+        }
+
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_TITLE, getTitle());
+        html = html.replaceAll(BackupTubeCommon.TEMPLATE_INFO, "info here");
+
+        PrintWriter writer = new PrintWriter(file);
+        writer.write(html);
+        writer.close();
     }
 }
