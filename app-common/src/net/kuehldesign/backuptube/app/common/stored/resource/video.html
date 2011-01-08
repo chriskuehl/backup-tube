@@ -2,6 +2,15 @@
 <html>
 	<head>
     	<title><!TITLE></title>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+        <script type="text/javascript">
+                $(function() {
+                        $("#notWorking a").click(function() {
+                                $("#notWorking").html("Unfortunately, some browsers (namely, Opera and Firefox) don't support the MPEG-4 video format for embedding. Old versions of browsers also may not be able to view the embedded video. You should use Google Chrome or Safari to view these files if you want to view the embedded video. The video in this folder will still work, you just won't be able to view it here.");
+                        });
+                });
+        </script>
     	<style type="text/css">
 			body {
 				background-color: #CCC;
@@ -91,6 +100,13 @@
 				text-align: left;
 				vertical-align: top;
 			}
+
+			#notWorking {
+				text-align: center;
+				font-size: 12px;
+				margin: 0px;
+				margin-bottom: 1em;
+			}
 		</style>
     </head>
     
@@ -101,6 +117,8 @@
                 <video src="<!VIDEO_FILE>" controls>
                     Viewing videos requires a browser supporting HTML5 video embedding. Try upgrading to the latest version of your browser.
                 </video>
+                
+                <p id="notWorking"><a href="#">Video not working?</a></p>
             </p>
             
             <!INFO>
