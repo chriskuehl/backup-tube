@@ -216,7 +216,7 @@ public class BackupTubeApp {
         File dataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_DATAFILE);
         LinkedList<String> listOfIDs = new LinkedList();
 
-        try { // TODO: add logic for moving videos once found
+        try {
             BackupTubeDataFile prevDataFile = getDataFile(dataFeedFile);
             boolean hasUpdated = false;
             LinkedList<ListedVideo> videosToDelete = new LinkedList();
@@ -236,8 +236,8 @@ public class BackupTubeApp {
                     File deletedVideosFolder = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS_DELETED);
                     deletedVideosFolder.mkdirs();
 
-                    File currentLocation = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS + "/" + video.getFolderName());
-                    File newLocation = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS_DELETED + "/" + video.getFolderName());
+                    File currentLocation = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS + File.separator + video.getFolderName());
+                    File newLocation = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS_DELETED + File.separator + video.getFolderName());
                     currentLocation.renameTo(newLocation);
 
                     videosToDelete.add(video);
@@ -297,7 +297,7 @@ public class BackupTubeApp {
                         Date date = new Date(video.getPublished());
                         String videoFolder = published.format(date) + " " + safeVideoTitle;
                         String videoFileName = safeVideoTitle + "." + video.getExtension();
-                        String videoSaveLocation = saveDir + BackupTubeCommon.LOCATION_VIDEOS + "/" + videoFolder + "/" + videoFileName;
+                        String videoSaveLocation = saveDir + BackupTubeCommon.LOCATION_VIDEOS + File.separator + videoFolder + File.separator + videoFileName;
 
                         File videoFile = new File(videoSaveLocation);
 
@@ -350,7 +350,7 @@ public class BackupTubeApp {
                         System.out.println("Successfully downloaded video \"" + video.getTitle() + "\"");
 
                         // create the video HTML file
-                        File singleVideoDataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS + "/" + videoFolder + "/" + BackupTubeCommon.LOCATION_VIDEO_DATAFILE);
+                        File singleVideoDataFeedFile = new File(saveDir + BackupTubeCommon.LOCATION_VIDEOS + File.separator + videoFolder + File.separator + BackupTubeCommon.LOCATION_VIDEO_DATAFILE);
 
                         if (singleVideoDataFeedFile.exists()) {
                             singleVideoDataFeedFile.delete();
