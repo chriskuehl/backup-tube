@@ -107,16 +107,16 @@ public class StoredVideo extends VideoInfoTable implements VideoInfoModule {
     public void saveHTML(File file, String videoFileName, String clientType, String clientVersion) throws FileNotFoundException {
         String html = BackupTubeCommon.getHTMLTemplate();
 
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_CLIENT_TYPE, BackupTubeCommon.escapeReplaceAllText(clientType));
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_CLIENT_VERSION, BackupTubeCommon.escapeReplaceAllText(clientVersion));
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_GEN_DATE, BackupTubeCommon.escapeReplaceAllText(BackupTubeCommon.getTimeString(BackupTubeCommon.getCurrentTime())));
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_TITLE, BackupTubeCommon.escapeReplaceAllText(getTitle() + " - " + getUploader()));
+        html = html.replace(BackupTubeCommon.TEMPLATE_CLIENT_TYPE, clientType);
+        html = html.replace(BackupTubeCommon.TEMPLATE_CLIENT_VERSION, clientVersion);
+        html = html.replace(BackupTubeCommon.TEMPLATE_GEN_DATE, BackupTubeCommon.getTimeString(BackupTubeCommon.getCurrentTime()));
+        html = html.replace(BackupTubeCommon.TEMPLATE_TITLE, getTitle() + " - " + getUploader());
 
         // replace spaces with %20
         String escapedVideoFileName = videoFileName.replaceAll(" ", "%20");
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_FILE, BackupTubeCommon.escapeReplaceAllText(escapedVideoFileName));
+        html = html.replace(BackupTubeCommon.TEMPLATE_VIDEO_FILE, escapedVideoFileName);
 
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_VIDEO_TITLE, BackupTubeCommon.escapeReplaceAllText(getTitle()));
+        html = html.replace(BackupTubeCommon.TEMPLATE_VIDEO_TITLE, getTitle());
 
         // generate info (details of the video, using VideoInfoModule
         String info = "";
