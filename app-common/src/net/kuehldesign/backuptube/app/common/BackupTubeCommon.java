@@ -111,4 +111,9 @@ public class BackupTubeCommon {
         
         return url;
     }
+
+    public static String escapeReplaceAllText(String text) {
+        text = text.replaceAll("$", "\\$");
+        return text;
+    }
 }
