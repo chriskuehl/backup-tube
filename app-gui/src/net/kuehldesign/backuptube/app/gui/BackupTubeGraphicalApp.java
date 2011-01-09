@@ -8,6 +8,10 @@ public class BackupTubeGraphicalApp {
     }
 
     public static void main(String[] args) {
+        // system properties
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        
+        // make class
         new BackupTubeGraphicalApp();
     }
 }
