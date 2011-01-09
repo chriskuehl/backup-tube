@@ -134,7 +134,7 @@ public class StoredVideo extends VideoInfoTable implements VideoInfoModule {
             info += moduleToShow.getHTML() + "\n";
         }
 
-        html = html.replaceAll(BackupTubeCommon.TEMPLATE_INFO, info);
+        html = html.replace(BackupTubeCommon.TEMPLATE_INFO, info);
 
         PrintWriter writer = new PrintWriter(file);
         writer.write(html);
