@@ -34,7 +34,7 @@ import net.kuehldesign.jnetutils.exception.FileAlreadyExistsException;
 
 public class BackupTubeApp {
     private static final String CLIENT_TYPE = "command-line";
-    private static final String CLIENT_VERSION = "0.21";
+    private static final String CLIENT_VERSION = "0.22";
     private static final String badSaveDirMessage = "Unable to create directory there, please choose a different location";
 
     private static void showHelp(PrintStream out) {
