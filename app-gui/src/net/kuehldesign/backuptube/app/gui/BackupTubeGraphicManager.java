@@ -18,6 +18,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -32,7 +33,9 @@ public class BackupTubeGraphicManager {
         JFrame newFrame = new JFrame("BackupTube");
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.setLayout(new GridBagLayout());
-        newFrame.setMinimumSize(new Dimension(400, 200));
+        newFrame.setMinimumSize(new Dimension(400, 300));
+        newFrame.setPreferredSize(new Dimension(500, 400));
+        newFrame.setLocationRelativeTo(null); // center
 
         // addMenuBarToFrame(newFrame);
         addControlsToFrame(newFrame);
@@ -188,10 +191,11 @@ public class BackupTubeGraphicManager {
         topPanel.add(panel, constraints);
 
         // separator
-        separator = new JSeparator(SwingConstants.HORIZONTAL);
+        separator = new JSeparator(SwingConstants.CENTER);
+        separator.setPreferredSize(new Dimension(10, 1));
 
         constraints = new GridBagConstraints();
-        constraints.weightx = 0;
+        constraints.weightx = 1;
         constraints.weighty = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
@@ -202,6 +206,7 @@ public class BackupTubeGraphicManager {
 
         // "Load Videos" button
         button = new JButton("Load Videos");
+        button.setEnabled(false);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 0;
@@ -218,9 +223,9 @@ public class BackupTubeGraphicManager {
         
 
         tableModel = new AbstractTableModel() {
-            private String[] columnNames = {"", "Title", "Date"};
+            private String[] columnNames = {"Backup", "Title", "Date"};
             private Object[][] data = {
-                                        {false, "Test", "Jan 1"}
+                                        {false, "Test", "January 1, 2011"}
                                       };
             
             @Override
@@ -272,5 +277,58 @@ public class BackupTubeGraphicManager {
 
         scrollPane = new JScrollPane(table);
         topPanel.add(scrollPane, constraints);
+
+        // status at the bottom
+        panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+
+        label = new JLabel("Status text here...");
+        label.setHorizontalAlignment(SwingConstants.LEFT);
+
+        constraints = new GridBagConstraints();
+        constraints.weightx = 1;
+        constraints.weighty = 0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(5, 0, 0, 0);
+
+        panel.add(label, constraints);
+
+        button = new JButton("Download");
+        button.setEnabled(false);
+
+        constraints = new GridBagConstraints();
+        constraints.weightx = 0;
+        constraints.weighty = 0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(5, 0, 0, 0);
+
+        panel.add(button, constraints);
+
+        button = new JButton("Help");
+        // button.setPreferredSize(new Dimension(30, (int) button.getPreferredSize().getHeight()));
+
+        constraints = new GridBagConstraints();
+        constraints.weightx = 0;
+        constraints.weighty = 0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(5, 0, 0, 0);
+
+        panel.add(button, constraints);
+
+        constraints = new GridBagConstraints();
+        constraints.weightx = 1;
+        constraints.weighty = 0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 6;
+        constraints.gridwidth = 2;
+
+        topPanel.add(panel, constraints);
     }
 }
