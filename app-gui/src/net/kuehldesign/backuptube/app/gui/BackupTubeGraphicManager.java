@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -18,12 +20,28 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-public class BackupTubeGraphicManager {
-    JFrame frame;
+public class BackupTubeGraphicManager implements ActionListener {
+    private JFrame frame;
+    private JLabel siteLabel;
+    private JComboBox siteDropDown;
+    private JLabel userLabel;
+    private JTextField userTextBox;
+    private JLabel folderLabel;
+    private JPanel saveDirectoryPanel;
+    private JLabel saveDirectoryLabel;
+    private JButton browseButton;
+    private JSeparator separator;
+    private JButton loadVideosButton;
+    private TableModel videosTableModel;
+    private JTable videosTable;
+    private JScrollPane videosTableScrollPane;
+    private JPanel statusPanel;
+    private JLabel statusLabel;
+    private JButton downloadButton;
+    private JButton helpButton;
 
     public BackupTubeGraphicManager() {
         frame = createInterface();
@@ -63,16 +81,6 @@ public class BackupTubeGraphicManager {
     }
 
     private void addControlsToFrame(JFrame frame) {
-        JLabel label;
-        JComboBox dropDown;
-        JTextField textField;
-        JButton button;
-        JSeparator separator;
-        JPanel panel;
-        JTable table;
-        TableModel tableModel;
-        JScrollPane scrollPane;
-        
         GridBagConstraints constraints;
         
         Container pane = frame.getContentPane();
@@ -90,8 +98,8 @@ public class BackupTubeGraphicManager {
         pane.add(topPanel, constraints);
 
         // "Site:" label
-        label = new JLabel("Site:");
-        label.setHorizontalAlignment(SwingConstants.RIGHT);
+        siteLabel = new JLabel("Site:");
+        siteLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 0;
@@ -99,13 +107,13 @@ public class BackupTubeGraphicManager {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.insets = new Insets(0, 0, 0, 5);
+        constraints.insets = new Insets(0, 0, 5, 5);
 
-        topPanel.add(label, constraints);
+        topPanel.add(siteLabel, constraints);
 
         // site dropdown
         String[] sites = {"YouTube"};
-        dropDown = new JComboBox(sites);
+        siteDropDown = new JComboBox(sites);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -113,12 +121,13 @@ public class BackupTubeGraphicManager {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 0;
+        constraints.insets = new Insets(0, 0, 5, 0);
 
-        topPanel.add(dropDown, constraints);
+        topPanel.add(siteDropDown, constraints);
 
-        // "Site:" label
-        label = new JLabel("User:");
-        label.setHorizontalAlignment(SwingConstants.RIGHT);
+        // "User:" label
+        userLabel = new JLabel("User:");
+        userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 0;
@@ -126,12 +135,12 @@ public class BackupTubeGraphicManager {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.insets = new Insets(0, 0, 0, 5);
+        constraints.insets = new Insets(0, 0, 5, 5);
 
-        topPanel.add(label, constraints);
+        topPanel.add(userLabel, constraints);
 
         // user input field
-        textField = new JTextField(20);
+        userTextBox = new JTextField(20);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -139,12 +148,13 @@ public class BackupTubeGraphicManager {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 1;
+        constraints.insets = new Insets(0, 0, 5, 0);
 
-        topPanel.add(textField, constraints);
+        topPanel.add(userTextBox, constraints);
 
         // "Folder:" label
-        label = new JLabel("Folder:");
-        label.setHorizontalAlignment(SwingConstants.RIGHT);
+        folderLabel = new JLabel("Folder:");
+        folderLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 0;
@@ -152,14 +162,14 @@ public class BackupTubeGraphicManager {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 2;
-        constraints.insets = new Insets(0, 0, 0, 5);
+        constraints.insets = new Insets(0, 0, 5, 5);
 
-        topPanel.add(label, constraints);
+        topPanel.add(folderLabel, constraints);
 
         // browser + label container
-        panel = new JPanel(new GridBagLayout());
+        saveDirectoryPanel = new JPanel(new GridBagLayout());
 
-        label = new JLabel("(no folder selected)");
+        saveDirectoryLabel = new JLabel("(no folder selected)");
 
         constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -168,9 +178,9 @@ public class BackupTubeGraphicManager {
         constraints.gridx = 0;
         constraints.gridy = 0;
 
-        panel.add(label, constraints);
+        saveDirectoryPanel.add(saveDirectoryLabel, constraints);
 
-        button = new JButton("Browse");
+        browseButton = new JButton("Browse");
 
         constraints = new GridBagConstraints();
         constraints.weightx = 0;
@@ -179,7 +189,7 @@ public class BackupTubeGraphicManager {
         constraints.gridx = 1;
         constraints.gridy = 0;
 
-        panel.add(button, constraints);
+        saveDirectoryPanel.add(browseButton, constraints);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -187,8 +197,9 @@ public class BackupTubeGraphicManager {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 2;
+        constraints.insets = new Insets(0, 0, 5, 0);
 
-        topPanel.add(panel, constraints);
+        topPanel.add(saveDirectoryPanel, constraints);
 
         // separator
         separator = new JSeparator(SwingConstants.CENTER);
@@ -201,12 +212,13 @@ public class BackupTubeGraphicManager {
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
+        constraints.insets = new Insets(0, 0, 5, 0);
 
         topPanel.add(separator, constraints);
 
         // "Load Videos" button
-        button = new JButton("Load Videos");
-        button.setEnabled(false);
+        loadVideosButton = new JButton("Load Videos");
+        loadVideosButton.setEnabled(false);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 0;
@@ -215,14 +227,15 @@ public class BackupTubeGraphicManager {
         constraints.anchor = GridBagConstraints.EAST;
         constraints.gridx = 1;
         constraints.gridy = 4;
+        constraints.insets = new Insets(0, 0, 5, 0);
 
-        topPanel.add(button, constraints);
+        topPanel.add(loadVideosButton, constraints);
 
         // video table
         String[] columns = {"", "Title", "Date"};
         
 
-        tableModel = new AbstractTableModel() {
+        videosTableModel = new AbstractTableModel() {
             private String[] columnNames = {"Backup", "Title", "Date"};
             private Object[][] data = {
                                         {false, "Test", "January 1, 2011"}
@@ -263,9 +276,9 @@ public class BackupTubeGraphicManager {
         };
 
 
-        table = new JTable(tableModel);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        table.getColumnModel().getColumn(0).setPreferredWidth(1);
+        videosTable = new JTable(videosTableModel);
+        videosTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        videosTable.getColumnModel().getColumn(0).setPreferredWidth(1);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -275,15 +288,15 @@ public class BackupTubeGraphicManager {
         constraints.gridy = 5;
         constraints.gridwidth = 2;
 
-        scrollPane = new JScrollPane(table);
-        topPanel.add(scrollPane, constraints);
+        videosTableScrollPane = new JScrollPane(videosTable);
+        topPanel.add(videosTableScrollPane, constraints);
 
         // status at the bottom
-        panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+        statusPanel = new JPanel();
+        statusPanel.setLayout(new GridBagLayout());
 
-        label = new JLabel("Status text here...");
-        label.setHorizontalAlignment(SwingConstants.LEFT);
+        statusLabel = new JLabel("Status text here...");
+        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -293,10 +306,10 @@ public class BackupTubeGraphicManager {
         constraints.gridy = 0;
         constraints.insets = new Insets(5, 0, 0, 0);
 
-        panel.add(label, constraints);
+        statusPanel.add(statusLabel, constraints);
 
-        button = new JButton("Download");
-        button.setEnabled(false);
+        downloadButton = new JButton("Download");
+        downloadButton.setEnabled(false);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 0;
@@ -304,11 +317,11 @@ public class BackupTubeGraphicManager {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 0;
-        constraints.insets = new Insets(5, 0, 0, 0);
+        constraints.insets = new Insets(5, 0, 0, 5);
 
-        panel.add(button, constraints);
+        statusPanel.add(downloadButton, constraints);
 
-        button = new JButton("Help");
+        helpButton = new JButton("Help");
         // button.setPreferredSize(new Dimension(30, (int) button.getPreferredSize().getHeight()));
 
         constraints = new GridBagConstraints();
@@ -319,7 +332,7 @@ public class BackupTubeGraphicManager {
         constraints.gridy = 0;
         constraints.insets = new Insets(5, 0, 0, 0);
 
-        panel.add(button, constraints);
+        statusPanel.add(helpButton, constraints);
 
         constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -329,6 +342,10 @@ public class BackupTubeGraphicManager {
         constraints.gridy = 6;
         constraints.gridwidth = 2;
 
-        topPanel.add(panel, constraints);
+        topPanel.add(statusPanel, constraints);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getSource());
     }
 }
